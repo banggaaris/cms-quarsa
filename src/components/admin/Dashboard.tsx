@@ -1,17 +1,14 @@
-import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useDashboardContent } from '@/hooks/useDashboardContent'
 import {
   Users,
   Briefcase,
-  Award,
   Building,
   Eye,
   Edit,
   Plus,
-  FileText,
-  Phone
+  FileText
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 

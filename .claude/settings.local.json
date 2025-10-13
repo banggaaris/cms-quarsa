@@ -5,7 +5,9 @@
       "Bash(npm run build:*)",
       "Bash(npm run dev:*)",
       "Bash(npm run type-check:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(./node_modules/.bin/tsc:*)",
+      "Bash(powershell.exe:*)"
     ],
     "deny": [],
     "ask": []
