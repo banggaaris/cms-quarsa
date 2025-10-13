@@ -1,0 +1,236 @@
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { useAboutContent } from '@/hooks/useAboutContent'
+import { Save, Eye, CheckCircle, AlertCircle, Building, Target } from 'lucide-react'
+import { Link } from 'react-router-dom'
+
+export function AboutEditor() {
+  const { about, loading, updateAbout } = useAboutContent()
+  const [aboutData, setAboutData] = useState(about)
+
+  // Update aboutData when about changes
+  useEffect(() => {
+    setAboutData(about)
+  }, [about])
+  const [saving, setSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+
+  const handleSave = async () => {
+    setSaving(true)
+    setSaveStatus('idle')
+
+    try {
+      // Update about content to database
+      const success = await updateAbout(aboutData)
+
+      if (success) {
+        setSaveStatus('success')
+        setSuccessMessage('About section updated successfully!')
+        setShowSuccessNotification(true)
+
+        // Hide success notification after 3 seconds
+        setTimeout(() => {
+          setShowSuccessNotification(false)
+        }, 3000)
+      } else {
+        setSaveStatus('error')
+        setTimeout(() => setSaveStatus('idle'), 3000)
+      }
+    } catch (error) {
+      setSaveStatus('error')
+      setTimeout(() => setSaveStatus('idle'), 3000)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleInputChange = (field: string, value: string) => {
+    setAboutData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border border-sky-600 border-t-transparent"></div>
+      </div>
+    )
+  }
+
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">About Section</h1>
+          <p className="text-gray-600 mt-1">Manage company information and value proposition</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" asChild>
+            <Link to="/#about" target="_blank">
+              <Eye className="w-4 h-4 mr-2" />
+              Preview Section
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Main Content Editor */}
+      <div className="space-y-6">
+        {/* Company Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Building className="w-5 h-5 text-sky-600" />
+              Company Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Main Title
+              </label>
+              <input
+                type="text"
+                value={aboutData.title}
+                onChange={(e) => handleInputChange('title', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
+                placeholder="Enter main title"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                First Description
+              </label>
+              <textarea
+                value={aboutData.description1}
+                onChange={(e) => handleInputChange('description1', e.target.value)}
+                rows={4}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
+                placeholder="Enter first description paragraph"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Second Description
+              </label>
+              <textarea
+                value={aboutData.description2}
+                onChange={(e) => handleInputChange('description2', e.target.value)}
+                rows={4}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
+                placeholder="Enter second description paragraph"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Vision & Mission */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5 text-sky-600" />
+              Vision & Mission
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Mission Statement
+              </label>
+              <textarea
+                value={aboutData.mission}
+                onChange={(e) => handleInputChange('mission', e.target.value)}
+                rows={3}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
+                placeholder="Enter mission statement"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Vision Statement
+              </label>
+              <textarea
+                value={aboutData.vision}
+                onChange={(e) => handleInputChange('vision', e.target.value)}
+                rows={3}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
+                placeholder="Enter vision statement"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Live Preview */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Live Preview</CardTitle>
+            <p className="text-sm text-gray-600">See how your content will appear on the website</p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="p-4 bg-gradient-to-br from-sky-50 to-gray-50 rounded-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">{aboutData.title}</h3>
+              <p className="text-sm text-gray-600 mb-3">{aboutData.description1}</p>
+              <p className="text-sm text-gray-600 mb-4">{aboutData.description2}</p>
+
+              <div className="border-t border-gray-200 pt-4 space-y-3">
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-1">Our Mission</h4>
+                  <p className="text-sm text-gray-600 italic">{aboutData.mission}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-1">Our Vision</h4>
+                  <p className="text-sm text-gray-600 italic">{aboutData.vision}</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Save Button */}
+      <div className="flex items-center justify-between pt-6 border-t">
+        <div className="flex items-center gap-3">
+          <Button onClick={handleSave} disabled={saving} className="bg-sky-600 hover:bg-sky-700">
+            <Save className="w-4 h-4 mr-2" />
+            {saving ? 'Saving...' : 'Save Changes'}
+          </Button>
+
+          {/* Save Status Indicator */}
+          {saveStatus === 'error' && (
+            <div className="flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+              <AlertCircle className="w-4 h-4" />
+              <span className="text-sm font-medium">Failed to save</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Success Notification Toast */}
+      {showSuccessNotification && (
+        <div className="fixed top-4 right-4 z-50 flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out">
+          <CheckCircle className="w-5 h-5 flex-shrink-0" />
+          <div>
+            <p className="font-medium">{successMessage}</p>
+            <p className="text-sm text-green-600">Changes have been saved successfully</p>
+          </div>
+          <button
+            onClick={() => setShowSuccessNotification(false)}
+            className="ml-4 text-green-600 hover:text-green-800 transition-colors"
+          >
+            X
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
