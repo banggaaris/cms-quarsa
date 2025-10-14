@@ -1,5 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext'
-import { LoginPage } from '@/components/LoginPage'
+import TravelConnectSignin1 from '@/components/ui/travel-connect-signin-1'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -20,7 +20,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   if (!user) {
-    return <LoginPage />
+    return <TravelConnectSignin1 />
   }
 
   return <>{children}</>

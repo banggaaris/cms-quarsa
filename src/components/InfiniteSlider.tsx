@@ -44,9 +44,8 @@ export const InfiniteSlider = ({
                 <p className="text-sm font-semibold text-red-600 mt-1">{item.industry}</p>
               </div>
               <p className="text-sm text-gray-600">{item.description}</p>
-              <div className="inline-flex items-center gap-1 px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">
-                <Clock className="w-3 h-3" />
-                {item.years} partnership
+              <div className="inline-flex items-center gap-1 px-3 py-1  rounded-full text-xs font-medium">
+                
               </div>
             </div>
           </div>

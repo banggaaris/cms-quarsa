@@ -13,7 +13,8 @@ import {
   Menu,
   X,
   LogOut,
-  User
+  User,
+  Building2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
@@ -29,7 +30,7 @@ const navigation = [
   { name: 'Services', href: '/admin/services', icon: Briefcase },
   { name: 'Team', href: '/admin/team', icon: Users },
   { name: 'Credentials', href: '/admin/credentials', icon: Award },
-  { name: 'Clients', href: '/admin/clients', icon: Users },
+  { name: 'Clients', href: '/admin/clients', icon: Building2 },
   { name: 'Gallery', href: '/admin/gallery', icon: Image },
   { name: 'Contact', href: '/admin/contact', icon: Phone },
   { name: 'Settings', href: '/admin/settings', icon: Settings },

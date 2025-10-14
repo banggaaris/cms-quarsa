@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { ColorPicker } from '@/components/ui/color-picker'
 import { useAboutContent } from '@/hooks/useAboutContent'
-import { Save, Eye, CheckCircle, AlertCircle, Building, Target } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Save, CheckCircle, AlertCircle, Building, Target, Palette } from 'lucide-react'
 
 export function AboutEditor() {
   const { about, loading, updateAbout } = useAboutContent()
@@ -54,6 +54,24 @@ export function AboutEditor() {
     }))
   }
 
+  const handleColorChange = (colorField: string, value: string) => {
+    setAboutData(prev => ({
+      ...prev,
+      [colorField]: value
+    }))
+  }
+
+  // Ensure aboutData has color fields initialized
+  useEffect(() => {
+    if (aboutData && !aboutData.gradientFromColor) {
+      setAboutData(prev => ({
+        ...prev,
+        gradientFromColor: "#0c4a6e",
+        gradientToColor: "#111827"
+      }))
+    }
+  }, [aboutData])
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -70,14 +88,6 @@ export function AboutEditor() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">About Section</h1>
           <p className="text-gray-600 mt-1">Manage company information and value proposition</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" asChild>
-            <Link to="/#about" target="_blank">
-              <Eye className="w-4 h-4 mr-2" />
-              Preview Section
-            </Link>
-          </Button>
         </div>
       </div>
 
@@ -170,27 +180,37 @@ export function AboutEditor() {
           </CardContent>
         </Card>
 
-        {/* Live Preview */}
+        {/* Color Settings */}
         <Card>
           <CardHeader>
-            <CardTitle>Live Preview</CardTitle>
-            <p className="text-sm text-gray-600">See how your content will appear on the website</p>
+            <CardTitle className="flex items-center gap-2">
+              <Palette className="w-5 h-5 text-sky-600" />
+              Gradient Background Colors
+            </CardTitle>
+            <p className="text-sm text-gray-600">Customize the gradient background colors for the mission & vision section</p>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-4 bg-gradient-to-br from-sky-50 to-gray-50 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-3">{aboutData.title}</h3>
-              <p className="text-sm text-gray-600 mb-3">{aboutData.description1}</p>
-              <p className="text-sm text-gray-600 mb-4">{aboutData.description2}</p>
-
-              <div className="border-t border-gray-200 pt-4 space-y-3">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">Our Mission</h4>
-                  <p className="text-sm text-gray-600 italic">{aboutData.mission}</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">Our Vision</h4>
-                  <p className="text-sm text-gray-600 italic">{aboutData.vision}</p>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ColorPicker
+                label="Gradient Start Color"
+                value={aboutData.gradientFromColor || "#0c4a6e"}
+                onChange={(e) => handleColorChange('gradientFromColor', e.target.value)}
+              />
+              <ColorPicker
+                label="Gradient End Color"
+                value={aboutData.gradientToColor || "#111827"}
+                onChange={(e) => handleColorChange('gradientToColor', e.target.value)}
+              />
+            </div>
+            <div className="mt-4 p-4 rounded-lg border border-gray-200">
+              <p className="text-sm font-medium text-gray-700 mb-2">Preview:</p>
+              <div
+                className="rounded-lg p-4 text-white text-center"
+                style={{
+                  background: `linear-gradient(to bottom right, ${aboutData.gradientFromColor || "#0c4a6e"}, ${aboutData.gradientToColor || "#111827"})`
+                }}
+              >
+                <p className="text-sm font-medium">Mission & Vision Section</p>
               </div>
             </div>
           </CardContent>

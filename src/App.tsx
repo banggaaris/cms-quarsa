@@ -326,15 +326,20 @@ export default function App() {
               </div>
 
             <div className="relative">
-              <div className="bg-gradient-to-br from-sky-900 to-gray-900 rounded-2xl p-8 text-white">
+              <div
+                className="rounded-2xl p-8 text-white"
+                style={{
+                  background: `linear-gradient(to bottom right, ${content.about.gradientFromColor || '#0c4a6e'}, ${content.about.gradientToColor || '#111827'})`
+                }}
+              >
                 <h3 className="text-2xl font-bold mb-6">Our Mission</h3>
                 <p className="text-lg mb-6">
-                  {content.about.mission}
+                  {content.about.mission || 'Loading mission...'}
                 </p>
-                <Separator className="bg-sky-700 my-6" />
+                <Separator className="bg-white/20 my-6" />
                 <h3 className="text-2xl font-bold mb-6">Our Vision</h3>
                 <p className="text-lg">
-                  {content.about.vision}
+                  {content.about.vision || 'Loading vision...'}
                 </p>
               </div>
             </div>

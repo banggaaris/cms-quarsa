@@ -7,6 +7,7 @@ import { HeroPage } from '@/components/admin/HeroPage'
 import { TeamEditor } from '@/components/admin/TeamEditor'
 import { ServicesEditor } from '@/components/admin/ServicesEditor'
 import { AboutEditor } from '@/components/admin/AboutEditor'
+import { ClientsEditor } from '@/components/admin/ClientsEditor'
 
 export default function AdminApp() {
   return (
@@ -19,6 +20,7 @@ export default function AdminApp() {
           <Route path="/about" element={<AboutEditor />} />
           <Route path="/team" element={<TeamEditor />} />
           <Route path="/services" element={<ServicesEditor />} />
+          <Route path="/clients" element={<ClientsEditor />} />
           {/* Add more routes as we create more editors */}
         </Routes>
       </AdminLayout>

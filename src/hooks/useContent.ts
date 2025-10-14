@@ -125,16 +125,18 @@ const defaultContent: WebsiteContent = {
     {
       id: "1",
       name: "Bank Central Asia",
-      industry: "Banking",
-      description: "Long-term strategic advisory partnership",
-      years: "10+"
+      industry: "Banking & Financial Services",
+      description: "One of Indonesia's largest private banks and a leading financial institution in Southeast Asia.",
+      years: "10+",
+      logo_url: ""
     },
     {
       id: "2",
       name: "Astra International",
-      industry: "Automotive & Heavy Equipment",
-      description: "M&A and restructuring advisory",
-      years: "8+"
+      industry: "Automotive & Manufacturing",
+      description: "A leading automotive company in Indonesia with diversified business interests in manufacturing, finance, and technology.",
+      years: "8+",
+      logo_url: ""
     }
   ],
   gallery: [
@@ -257,10 +259,10 @@ export function useContent() {
         const clients: Client[] = clientsData.map(client => ({
           id: client.id,
           name: client.name,
-          industry: '',
-          description: '',
+          industry: client.industry || '',
+          description: client.description || '',
           years: '',
-          logoUrl: client.logo_url || ''
+          logo_url: client.logo_url || ''
         }))
         setContent(prev => ({ ...prev, clients }))
       }

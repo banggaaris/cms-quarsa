@@ -33,6 +33,7 @@ export interface Client {
   industry: string;
   description: string;
   years: string;
+  logo_url?: string;
 }
 
 export interface GalleryItem {
