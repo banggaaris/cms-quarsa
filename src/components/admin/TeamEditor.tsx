@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { DeleteConfirmationModal } from './DeleteConfirmationModal'
 import { useTeamsContent } from '@/hooks/useTeamsContent'
 import { TeamMember } from '@/types/content'
-import { Save, Plus, Edit, Trash2, Eye, User, CheckCircle, AlertCircle, GripVertical } from 'lucide-react'
+import { Plus, Edit, Trash2, Eye, User, CheckCircle, AlertCircle, GripVertical } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import {
   DndContext,

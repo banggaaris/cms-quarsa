@@ -73,6 +73,8 @@ export interface AboutContent {
   description2: string;
   mission: string;
   vision: string;
+  gradientFromColor: string;
+  gradientToColor: string;
   stats: {
     years: string;
     deals: string;

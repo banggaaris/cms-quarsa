@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Building, Clock } from 'lucide-react'
+import { Building } from 'lucide-react'
 
 interface InfiniteSliderProps {
   items: any[];

@@ -32,6 +32,8 @@ const defaultContent: WebsiteContent = {
     description2: "Our team of seasoned professionals brings decades of experience in investment banking, corporate restructuring, and strategic advisory services to help clients navigate complex financial challenges and seize growth opportunities.",
     mission: "To provide exceptional investment advisory services that create sustainable value for our clients through strategic insight, operational excellence, and unwavering commitment to success.",
     vision: "To be the most trusted investment advisory partner in Southeast Asia, recognized for our integrity, expertise, and transformative impact on businesses and economies.",
+    gradientFromColor: "#0c4a6e",
+    gradientToColor: "#111827",
     stats: {
       years: "30+",
       deals: "750+",
@@ -285,6 +287,8 @@ export function useContent() {
             description2: aboutData.description2,
             mission: aboutData.mission,
             vision: aboutData.vision,
+            gradientFromColor: aboutData.gradient_from_color || "#0c4a6e",
+            gradientToColor: aboutData.gradient_to_color || "#111827",
             stats: prev.about.stats // Keep existing stats from default content
           }
         }))
