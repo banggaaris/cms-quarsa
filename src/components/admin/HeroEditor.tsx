@@ -26,19 +26,13 @@ export function HeroEditor() {
   const confirmDeleteHero = async () => {
     if (!heroToDelete) return
 
-    console.log(`=== DELETE CONFIRMATION STARTED ===`)
-    console.log(`Attempting to delete hero with ID: "${heroToDelete}"`)
-    console.log(`Hero title: "${heroToDeleteTitle}"`)
-
     setDeleting(true)
     setDeleteError('')
     try {
       await deleteHero(heroToDelete)
-      console.log(`Successfully deleted hero: "${heroToDeleteTitle}" (ID: ${heroToDelete})`)
       setDeleteModalOpen(false)
       setHeroToDelete(null)
       setHeroToDeleteTitle('')
-      console.log(`=== DELETE CONFIRMATION COMPLETED ===`)
     } catch (error) {
       console.error('Error deleting hero:', error)
       setDeleteError(error instanceof Error ? error.message : 'Failed to delete hero section')
@@ -171,27 +165,13 @@ export function HeroEditor() {
                               variant="outline"
                               size="sm"
                               onClick={async () => {
-                                console.log(`=== UNPUBLISH ACTION STARTED ===`)
-                                console.log(`Unpublishing hero: "${hero.title}" (ID: ${hero.id})`)
-                                console.log(`Current status: ${hero.status}`)
-                                console.log(`Current heroes order:`, heroes.map((h, i) => ({
-                                  index: i,
-                                  id: h.id,
-                                  title: h.title,
-                                  status: h.status,
-                                  updated: h.updated_at
-                                })))
-
                                 setPublishing(true)
                                 try {
                                   await unpublishHero(hero.id)
-                                  console.log(`Successfully unpublished hero: "${hero.title}"`)
-                                  console.log(`Hero status changed from 'published' to 'draft'`)
                                 } catch (error) {
                                   console.error('Error unpublishing hero:', error)
                                 } finally {
                                   setPublishing(false)
-                                  console.log(`=== UNPUBLISH ACTION COMPLETED ===`)
                                 }
                               }}
                               disabled={publishing}
@@ -209,27 +189,13 @@ export function HeroEditor() {
                               variant="outline"
                               size="sm"
                               onClick={async () => {
-                                console.log(`=== PUBLISH ACTION STARTED ===`)
-                                console.log(`Publishing hero: "${hero.title}" (ID: ${hero.id})`)
-                                console.log(`Current status: ${hero.status}`)
-                                console.log(`Current heroes order:`, heroes.map((h, i) => ({
-                                  index: i,
-                                  id: h.id,
-                                  title: h.title,
-                                  status: h.status,
-                                  updated: h.updated_at
-                                })))
-
                                 setPublishing(true)
                                 try {
                                   await publishHero(hero.id)
-                                  console.log(`Successfully published hero: "${hero.title}"`)
-                                  console.log(`Hero status changed from 'draft' to 'published'`)
                                 } catch (error) {
                                   console.error('Error publishing hero:', error)
                                 } finally {
                                   setPublishing(false)
-                                  console.log(`=== PUBLISH ACTION COMPLETED ===`)
                                 }
                               }}
                               disabled={publishing}

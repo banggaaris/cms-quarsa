@@ -173,10 +173,18 @@ export function useContent() {
 
   useEffect(() => {
     loadContent()
+
+    // Add timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setLoading(false)
+    }, 5000) // 5 second timeout
+
+    return () => clearTimeout(timeout)
   }, [])
 
   const loadContent = async () => {
     try {
+     
       // Load hero content (only published)
       const { data: heroData, error: heroError } = await supabase
         .from('hero_content')
@@ -340,6 +348,7 @@ export function useContent() {
 
     } catch (error) {
       console.error('Error loading content:', error)
+      setLoading(false)
     } finally {
       setLoading(false)
     }

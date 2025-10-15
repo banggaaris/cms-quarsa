@@ -58,8 +58,7 @@ export function useAboutContent() {
   }
 
   const updateAbout = async (aboutUpdate: Partial<AboutContent>) => {
-    console.log('updateAbout called with:', aboutUpdate)
-    try {
+        try {
       const aboutPayload = {
         title: aboutUpdate.title || about.title,
         description1: aboutUpdate.description1 || about.description1,
@@ -84,14 +83,12 @@ export function useAboutContent() {
           .from('about_content')
           .update(aboutPayload)
           .eq('id', existingAbout.id)
-        console.log('Updated about content')
-      } else {
+              } else {
         // Insert new record
         result = await supabase
           .from('about_content')
           .insert(aboutPayload)
-        console.log('Created new about content')
-      }
+              }
 
       if (!result || result.error) {
         console.error('Error updating about content:', result?.error || 'Unknown error')
@@ -100,8 +97,7 @@ export function useAboutContent() {
 
       // Update local state
       setAbout(prev => ({ ...prev, ...aboutUpdate }))
-      console.log('About content updated successfully')
-      return true
+            return true
     } catch (error) {
       console.error('Error updating about:', error)
       return false

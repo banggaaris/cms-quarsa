@@ -49,13 +49,11 @@ export function useHeroContent() {
   }
 
   const updateHero = async (hero: Partial<HeroContent>, heroId?: string) => {
-    console.log(`updateHero called with:`, { heroId, status: hero.status, hero })
     try {
       let heroPayload: any
 
       if (heroId && (Object.keys(hero).length === 1 && hero.status)) {
         // If only updating status for a specific hero (publish/unpublish), only update status
-        console.log('Only updating status for specific hero')
         heroPayload = { status: hero.status }
       } else {
         // Full hero update - get current data from database if specific hero
@@ -100,16 +98,12 @@ export function useHeroContent() {
         }
       }
 
-      console.log(`heroPayload:`, heroPayload)
-
       let result
       if (heroId) {
-        console.log(`Updating specific hero with ID: ${heroId}`)
         result = await supabase
           .from('hero_content')
           .update(heroPayload)
           .eq('id', heroId)
-        console.log(`Updated hero ${heroId} with payload:`, heroPayload)
       } else {
         // Update the most recent hero
         const { data: latestHero } = await supabase
@@ -120,12 +114,10 @@ export function useHeroContent() {
           .single()
 
         if (latestHero?.id) {
-          console.log(`Updating most recent hero with ID: ${latestHero.id}`)
           result = await supabase
             .from('hero_content')
             .update(heroPayload)
             .eq('id', latestHero.id)
-          console.log(`Updated most recent hero ${latestHero.id} with payload:`, heroPayload)
         }
       }
 
@@ -134,9 +126,7 @@ export function useHeroContent() {
         return
       }
 
-      console.log('Hero updated successfully, reloading content...')
       await loadHeroContent()
-      console.log('Content reloaded after hero update')
     } catch (error) {
       console.error('Error updating hero:', error)
     }
@@ -177,19 +167,13 @@ export function useHeroContent() {
   }
 
   const deleteHero = async (heroId: string) => {
-    console.log(`=== deleteHero FUNCTION STARTED ===`)
-    console.log(`Deleting hero with ID: "${heroId}"`)
-
     try {
       // First, let's verify the hero exists before deleting
-      console.log(`Checking if hero exists with ID: "${heroId}"`)
       const { data: existingHero, error: checkError } = await supabase
         .from('hero_content')
         .select('*')
         .eq('id', heroId)
         .single()
-
-      console.log(`Hero existence check result:`, { existingHero, checkError })
 
       if (checkError) {
         console.error('Error checking hero existence:', checkError)
@@ -197,76 +181,54 @@ export function useHeroContent() {
       }
 
       if (!existingHero) {
-        console.error(`Hero with ID "${heroId}" does not exist in database`)
         throw new Error(`Hero with ID "${heroId}" not found`)
       }
 
-      console.log(`Hero found, proceeding with delete:`, existingHero)
-
-      console.log(`Executing Supabase delete operation without .select()...`)
       const result = await supabase
         .from('hero_content')
         .delete()
         .eq('id', heroId)
 
-      console.log(`Supabase delete result:`, result)
-      console.log(`Delete error:`, result.error)
-
       if (result.error) {
         console.error('Error deleting hero:', result.error)
-        console.error(`Error details:`, result.error)
         throw new Error(`Failed to delete hero: ${result.error.message}`)
       }
 
       // Since we removed .select(), we can't check if data was returned
       // But we can verify the delete worked by checking if the hero is gone
-      console.log(`Verifying delete by checking if hero still exists...`)
       const { data: verifyDelete, error: verifyError } = await supabase
         .from('hero_content')
         .select('*')
         .eq('id', heroId)
         .maybeSingle() // Use maybeSingle() instead of single() to avoid 406 errors
 
-      console.log(`Verification result:`, { verifyDelete, verifyError })
-
       if (!verifyError && verifyDelete) {
-        console.error(`Hero still exists after delete operation!`)
-        console.error(`This indicates a Row Level Security (RLS) policy issue in Supabase.`)
-        console.error(`The delete operation returned 204 success but the RLS policy prevented actual deletion.`)
         throw new Error(`Delete operation failed due to database permissions. The hero section cannot be deleted because of Row Level Security (RLS) policies in Supabase. Please check your Supabase RLS policies for the 'hero_content' table.`)
       }
 
       if (verifyError) {
         // Handle various error codes that indicate the record was not found (which is good)
         const notFoundCodes = ['PGRST116', '406', '404']
-        if (notFoundCodes.includes(verifyError.code) || notFoundCodes.includes(verifyError.message?.includes('406') ? '406' : '')) {
-          console.log(`Hero successfully deleted (verification shows record not found)`)
-        } else {
-          console.error(`Unexpected verification error:`, verifyError)
+        if (!notFoundCodes.includes(verifyError.code) &&
+            !verifyError.message?.includes('406') &&
+            !verifyError.message?.includes('404')) {
           throw new Error(`Delete verification failed: ${verifyError.message}`)
         }
       }
 
-      console.log(`Delete verified successfully - hero no longer exists`)
-      console.log(`Delete operation successful, reloading content...`)
       await loadHeroContent()
-      console.log(`Content reloaded after delete operation`)
-      console.log(`=== deleteHero FUNCTION COMPLETED ===`)
       return { success: true }
     } catch (error) {
       console.error('Error deleting hero:', error)
-      console.error(`Catch error details:`, error)
       throw error
     }
   }
 
   const publishHero = async (heroId?: string) => {
-    console.log(`publishHero called with heroId: ${heroId}`)
     await updateHero({ status: 'published' }, heroId)
   }
 
   const unpublishHero = async (heroId?: string) => {
-    console.log(`unpublishHero called with heroId: ${heroId}`)
     await updateHero({ status: 'draft' }, heroId)
   }
 

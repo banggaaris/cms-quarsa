@@ -184,10 +184,6 @@ export function useAdminContent() {
       if (heroError) {
         console.error('Error loading hero content:', heroError)
       } else if (heroData && heroData.length > 0) {
-        console.log('Loading heroes - current order:')
-        heroData.forEach((hero, index) => {
-          console.log(`  ${index}: ID=${hero.id}, Title="${hero.title}", Status=${hero.status}, Updated=${hero.updated_at}`)
-        })
 
         // Use the most recent hero for display, but store all for admin list
         const latestHero = heroData[0]
@@ -349,14 +345,12 @@ export function useAdminContent() {
   }
 
   const updateHero = async (hero: Partial<WebsiteContent['hero']>, heroId?: string) => {
-    console.log(`updateHero called with:`, { heroId, status: hero.status, hero })
-    try {
+        try {
       let heroPayload: any
 
       if (heroId && (Object.keys(hero).length === 1 && hero.status)) {
         // If only updating status for a specific hero (publish/unpublish), only update status
-        console.log('Only updating status for specific hero')
-        heroPayload = { status: hero.status }
+                heroPayload = { status: hero.status }
       } else {
         // Full hero update - get current data from database if specific hero
         if (heroId) {
@@ -390,17 +384,14 @@ export function useAdminContent() {
         }
       }
 
-      console.log(`heroPayload:`, heroPayload)
-
+      
       let result
       if (heroId) {
-        console.log(`Updating specific hero with ID: ${heroId}`)
-        result = await supabase
+                result = await supabase
           .from('hero_content')
           .update(heroPayload)
           .eq('id', heroId)
-        console.log(`Updated hero ${heroId} with payload:`, heroPayload)
-      } else {
+              } else {
         // Update the most recent hero
         const { data: latestHero } = await supabase
           .from('hero_content')
@@ -410,13 +401,11 @@ export function useAdminContent() {
           .single()
 
         if (latestHero?.id) {
-          console.log(`Updating most recent hero with ID: ${latestHero.id}`)
-          result = await supabase
+                    result = await supabase
             .from('hero_content')
             .update(heroPayload)
             .eq('id', latestHero.id)
-          console.log(`Updated most recent hero ${latestHero.id} with payload:`, heroPayload)
-        }
+                  }
       }
 
       if (!result || result.error) {
@@ -424,11 +413,9 @@ export function useAdminContent() {
         return
       }
 
-      console.log('Hero updated successfully, reloading content...')
-      // Reload content to get updated list
+            // Reload content to get updated list
       await loadContent()
-      console.log('Content reloaded after hero update')
-    } catch (error) {
+          } catch (error) {
       console.error('Error updating hero:', error)
     }
   }
@@ -483,18 +470,15 @@ export function useAdminContent() {
   }
 
   const publishHero = async (heroId?: string) => {
-    console.log(`publishHero called with heroId: ${heroId}`)
-    await updateHero({ status: 'published' }, heroId)
+        await updateHero({ status: 'published' }, heroId)
   }
 
   const unpublishHero = async (heroId?: string) => {
-    console.log(`unpublishHero called with heroId: ${heroId}`)
-    await updateHero({ status: 'draft' }, heroId)
+        await updateHero({ status: 'draft' }, heroId)
   }
 
   const updateAbout = async (about: Partial<WebsiteContent['about']>) => {
-    console.log('updateAbout called with:', about)
-    try {
+        try {
       const aboutPayload = {
         title: about.title || content.about.title,
         description1: about.description1 || content.about.description1,
@@ -519,14 +503,12 @@ export function useAdminContent() {
           .from('about_content')
           .update(aboutPayload)
           .eq('id', existingAbout.id)
-        console.log('Updated about content')
-      } else {
+              } else {
         // Insert new record
         result = await supabase
           .from('about_content')
           .insert(aboutPayload)
-        console.log('Created new about content')
-      }
+              }
 
       if (!result || result.error) {
         console.error('Error updating about content:', result?.error || 'Unknown error')
@@ -535,8 +517,7 @@ export function useAdminContent() {
 
       // Update local state
       setContent(prev => ({ ...prev, about: { ...prev.about, ...about } }))
-      console.log('About content updated successfully')
-      return true
+            return true
     } catch (error) {
       console.error('Error updating about:', error)
       return false
@@ -582,8 +563,7 @@ export function useAdminContent() {
 
       // Update local state
       setContent(prev => ({ ...prev, team }))
-      console.log('Team content updated successfully')
-      return true
+            return true
     } catch (error) {
       console.error('Error updating team:', error)
       return false
