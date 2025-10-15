@@ -8,6 +8,7 @@ interface SEOProps {
   canonical?: string
   ogImage?: string
   ogType?: string
+  favicon?: string
   structuredData?: Record<string, any>
 }
 
@@ -18,6 +19,7 @@ export function SEO({
   canonical,
   ogImage,
   ogType = 'website',
+  favicon,
   structuredData
 }: SEOProps) {
   const { content } = useContent()
@@ -110,6 +112,10 @@ export function SEO({
       <meta property="twitter:image" content={defaultOgImage} />
       <meta property="twitter:site" content="@QuasarCapitalID" />
       <meta property="twitter:creator" content="@QuasarCapitalID" />
+
+      {/* Favicon */}
+      {favicon && <link rel="icon" href={favicon} />}
+      {favicon && <link rel="apple-touch-icon" href={favicon} />}
 
       {/* Additional SEO Meta */}
       <meta name="language" content="English" />

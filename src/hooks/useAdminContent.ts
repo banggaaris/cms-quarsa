@@ -582,8 +582,60 @@ export function useAdminContent() {
     setContent(prev => ({ ...prev, gallery }))
   }
 
-  const updateContact = (contact: Partial<WebsiteContent['contact']>) => {
-    setContent(prev => ({ ...prev, contact: { ...prev.contact, ...contact } }))
+  const updateContact = async (contact: Partial<WebsiteContent['contact']>) => {
+    try {
+      const contactPayload = {
+        address: contact.address || content.contact.address,
+        phone: contact.phone || content.contact.phone,
+        email: contact.email || content.contact.email,
+        business_hours_weekdays: contact.businessHours?.weekdays || content.contact.businessHours.weekdays,
+        business_hours_saturday: contact.businessHours?.saturday || content.contact.businessHours.saturday,
+        business_hours_sunday: contact.businessHours?.sunday || content.contact.businessHours.sunday
+      }
+
+      // Check if contact content already exists
+      const { data: existingContact } = await supabase
+        .from('contact_content')
+        .select('id')
+        .limit(1)
+        .single()
+
+      let result
+      if (existingContact?.id) {
+        // Update existing record
+        result = await supabase
+          .from('contact_content')
+          .update(contactPayload)
+          .eq('id', existingContact.id)
+      } else {
+        // Insert new record
+        result = await supabase
+          .from('contact_content')
+          .insert(contactPayload)
+      }
+
+      if (!result || result.error) {
+        console.error('Error updating contact content:', result?.error || 'Unknown error')
+        return false
+      }
+
+      // Update local state
+      setContent(prev => ({
+        ...prev,
+        contact: {
+          ...prev.contact,
+          ...contact,
+          businessHours: {
+            ...prev.contact.businessHours,
+            ...contact.businessHours
+          }
+        }
+      }))
+      return true
+    } catch (error) {
+      console.error('Error updating contact:', error)
+      return false
+    }
   }
 
   return {

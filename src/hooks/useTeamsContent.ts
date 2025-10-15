@@ -182,18 +182,28 @@ export function useTeamsContent() {
   const deleteTeamMember = async (id: string) => {
     try {
       setError(null)
+      console.log('Attempting to delete team member with ID:', id)
 
-      const { error: deleteError } = await supabase
+      const { error: deleteError, count } = await supabase
         .from('team_content')
-        .delete()
+        .delete({ count: 'exact' })
         .eq('id', id)
+
+      console.log('Delete operation result:', { error: deleteError, count })
 
       if (deleteError) {
         console.error('Error deleting team member:', deleteError)
-        setError(deleteError.message)
+        setError(`Delete failed: ${deleteError.message}`)
         return false
       }
 
+      if (count === 0) {
+        console.warn('No team member found to delete with ID:', id)
+        setError('Team member not found')
+        return false
+      }
+
+      console.log('Successfully deleted team member, updating local state')
       setTeam(prev => prev.filter(member => member.id !== id))
       return true
     } catch (err) {
