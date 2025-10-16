@@ -111,16 +111,16 @@ const defaultContent: WebsiteContent = {
     {
       id: "1",
       title: "Licensed Investment Advisor",
-      issuer: "Financial Services Authority (OJK)",
-      year: "2010 - Present",
-      type: "Professional License"
+      description: "Official license from Indonesia's Financial Services Authority (OJK) to provide professional investment advisory services with the highest standards of compliance and ethics.",
+      logo_url: "https://cdn-icons-png.flaticon.com/512/2620/2620679.png",
+      order_index: 0
     },
     {
       id: "2",
       title: "ISO 9001:2015 Certified",
-      issuer: "International Organization for Standardization",
-      year: "2018 - Present",
-      type: "Quality Management"
+      description: "International quality management system certification ensuring excellence in our service delivery processes and client satisfaction standards.",
+      logo_url: "https://cdn-icons-png.flaticon.com/512/2620/2620574.png",
+      order_index: 1
     }
   ],
   clients: [
@@ -280,9 +280,9 @@ export function useAdminContent() {
         const credentials: Credential[] = credentialsData.map(cred => ({
           id: cred.id,
           title: cred.title,
-          issuer: cred.issuer,
-          year: cred.year,
-          type: cred.type
+          description: cred.description || '',
+          logo_url: cred.logo_url || '',
+          order_index: cred.order_index || 0
         }))
         setContent(prev => ({ ...prev, credentials }))
       }
