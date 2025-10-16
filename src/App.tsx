@@ -738,7 +738,13 @@ export default function App() {
       {/* Credentials Section */}
       <section id="credentials" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
             <Badge className="mb-4 bg-sky-100 text-sky-800 border-sky-200">Credentials</Badge>
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
               Professional Certifications & Awards
@@ -747,33 +753,74 @@ export default function App() {
               Our commitment to excellence is reflected in our professional certifications,
               licenses, and industry recognition.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {content.credentials.map((credential) => (
-              <Card key={credential.id} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <CardHeader>
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-                      <Award className="w-6 h-6 text-amber-600" />
+            {content.credentials.map((credential, index) => (
+              <motion.div
+                key={credential.id}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.1,
+                  type: "spring",
+                  stiffness: 100
+                }}
+                viewport={{ once: true }}
+                whileHover={{
+                  y: -5,
+                  scale: 1.02,
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-300 h-full group">
+                  <CardHeader>
+                    <div className="flex items-start gap-4">
+                      <motion.div
+                        className="w-16 h-16 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
+                        whileHover={{ rotate: 5, scale: 1.1 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {credential.logo_url ? (
+                          <img
+                            src={credential.logo_url}
+                            alt={credential.title}
+                            className="w-full h-full object-contain p-2"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none'
+                              e.currentTarget.nextElementSibling?.classList.remove('hidden')
+                            }}
+                          />
+                        ) : null}
+                        <div className={`${credential.logo_url ? 'hidden' : ''} w-full h-full flex items-center justify-center`}>
+                          <Award className="w-8 h-8 text-amber-600" />
+                        </div>
+                      </motion.div>
+                      <div className="flex-1 min-w-0">
+                        <motion.h3
+                          className="text-xl font-bold mb-2 group-hover:text-sky-700 transition-colors duration-300"
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 + 0.1 }}
+                          viewport={{ once: true }}
+                        >
+                          {credential.title}
+                        </motion.h3>
+                        <motion.p
+                          className="text-gray-600 mt-2 line-clamp-4"
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 + 0.2 }}
+                          viewport={{ once: true }}
+                        >
+                          {credential.description}
+                        </motion.p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-xl font-bold mb-2">{credential.title}</CardTitle>
-                      <CardDescription className="text-gray-600">
-                        {credential.issuer}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline" className="border-red-200 text-red-800">
-                      {credential.type}
-                    </Badge>
-                    <span className="text-sm text-gray-500">{credential.year}</span>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardHeader>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -838,7 +885,13 @@ export default function App() {
       {/* Gallery Section */}
       <section id="gallery" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
             <Badge className="mb-4 bg-sky-100 text-sky-800 border-sky-200">Gallery</Badge>
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
               Our Journey in Pictures
@@ -846,24 +899,98 @@ export default function App() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Explore our milestones, team events, and the moments that define our commitment to excellence.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {content.gallery.map((item) => (
-              <Card key={item.id} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-                <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                  <ImageIcon className="w-12 h-12 text-gray-400" />
-                </div>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline" className="border-amber-200 text-amber-800">
-                      {item.category}
-                    </Badge>
-                  </div>
-                  <h3 className="text-lg font-bold mb-2">{item.title}</h3>
-                  <p className="text-sm text-gray-600">{item.description}</p>
-                </CardContent>
-              </Card>
+            {content.gallery.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.1,
+                  type: "spring",
+                  stiffness: 100
+                }}
+                viewport={{ once: true }}
+                whileHover={{
+                  y: -8,
+                  scale: 1.02,
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden h-full group">
+                  <motion.div
+                    className="aspect-video bg-gray-200 flex items-center justify-center relative overflow-hidden"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    {item.imageUrl ? (
+                      <>
+                        <motion.img
+                          src={item.imageUrl}
+                          alt={item.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none'
+                            e.currentTarget.nextElementSibling?.classList.remove('hidden')
+                          }}
+                          initial={{ scale: 1 }}
+                          whileHover={{ scale: 1.1 }}
+                          transition={{ duration: 0.4 }}
+                        />
+                        {/* Overlay gradient on hover */}
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 1 }}
+                        />
+                      </>
+                    ) : null}
+                    <div className={`${item.imageUrl ? 'hidden' : ''} flex items-center justify-center w-full h-full`}>
+                      <motion.div
+                        initial={{ rotate: 0 }}
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                      >
+                        <ImageIcon className="w-12 h-12 text-gray-400" />
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                  <CardContent className="p-6">
+                    <motion.div
+                      className="flex items-center justify-between mb-2"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ delay: index * 0.1 + 0.2 }}
+                      viewport={{ once: true }}
+                    >
+                      <Badge variant="outline" className="border-amber-200 text-amber-800">
+                        {item.category}
+                      </Badge>
+                    </motion.div>
+                    <motion.h3
+                      className="text-lg font-bold mb-2 group-hover:text-sky-700 transition-colors duration-300"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 + 0.3 }}
+                      viewport={{ once: true }}
+                    >
+                      {item.title}
+                    </motion.h3>
+                    <motion.p
+                      className="text-sm text-gray-600"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 + 0.4 }}
+                      viewport={{ once: true }}
+                    >
+                      {item.description}
+                    </motion.p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>

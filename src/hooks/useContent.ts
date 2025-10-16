@@ -277,6 +277,25 @@ export function useContent() {
         setContent(prev => ({ ...prev, clients }))
       }
 
+      // Load gallery content
+      const { data: galleryData, error: galleryError } = await supabase
+        .from('gallery_content')
+        .select('*')
+        .order('order_index', { ascending: true })
+
+      if (galleryError) {
+        console.error('Error loading gallery:', galleryError)
+      } else if (galleryData) {
+        const gallery: GalleryItem[] = galleryData.map(item => ({
+          id: item.id,
+          title: item.title,
+          description: item.description || '',
+          category: item.category || 'general',
+          imageUrl: item.image_url || ''
+        }))
+        setContent(prev => ({ ...prev, gallery }))
+      }
+
       // Load about content
       const { data: aboutData, error: aboutError } = await supabase
         .from('about_content')
@@ -314,9 +333,9 @@ export function useContent() {
         const credentials: Credential[] = credentialsData.map(cred => ({
           id: cred.id,
           title: cred.title,
-          issuer: cred.issuer,
-          year: cred.year,
-          type: cred.type
+          description: cred.description || '',
+          logo_url: cred.logo_url || '',
+          order_index: cred.order_index || 0
         }))
         setContent(prev => ({ ...prev, credentials }))
       }

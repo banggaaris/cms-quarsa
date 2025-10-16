@@ -22,9 +22,9 @@ export interface Service {
 export interface Credential {
   id: string;
   title: string;
-  issuer: string;
-  year: string;
-  type: string;
+  description: string;
+  logo_url?: string;
+  order_index: number;
 }
 
 export interface Client {

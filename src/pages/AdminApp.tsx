@@ -11,6 +11,8 @@ const TeamEditor = React.lazy(() => import('@/components/admin/TeamEditor').then
 const ServicesEditor = React.lazy(() => import('@/components/admin/ServicesEditor').then(module => ({ default: module.ServicesEditor })))
 const AboutEditor = React.lazy(() => import('@/components/admin/AboutEditor').then(module => ({ default: module.AboutEditor })))
 const ClientsEditor = React.lazy(() => import('@/components/admin/ClientsEditor').then(module => ({ default: module.ClientsEditor })))
+const GalleryEditor = React.lazy(() => import('@/components/admin/GalleryEditor').then(module => ({ default: module.GalleryEditor })))
+const CredentialsEditor = React.lazy(() => import('@/components/admin/CredentialsEditor').then(module => ({ default: module.CredentialsEditor })))
 const ContactEditor = React.lazy(() => import('@/components/admin/ContactEditor').then(module => ({ default: module.ContactEditor })))
 const SettingsEditor = React.lazy(() => import('@/components/admin/SettingsEditor').then(module => ({ default: module.SettingsEditor })))
 
@@ -39,6 +41,8 @@ export default function AdminApp() {
           <Route path="/team" element={<AdminRouteWrapper><TeamEditor /></AdminRouteWrapper>} />
           <Route path="/services" element={<AdminRouteWrapper><ServicesEditor /></AdminRouteWrapper>} />
           <Route path="/clients" element={<AdminRouteWrapper><ClientsEditor /></AdminRouteWrapper>} />
+          <Route path="/gallery" element={<AdminRouteWrapper><GalleryEditor /></AdminRouteWrapper>} />
+          <Route path="/credentials" element={<AdminRouteWrapper><CredentialsEditor /></AdminRouteWrapper>} />
           <Route path="/contact" element={<AdminRouteWrapper><ContactEditor /></AdminRouteWrapper>} />
           <Route path="/settings" element={<AdminRouteWrapper><SettingsEditor /></AdminRouteWrapper>} />
           {/* Add more routes as we create more editors */}
