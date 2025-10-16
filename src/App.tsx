@@ -31,13 +31,16 @@ import {
 import { CookieConsent } from '@/components/CookieConsent'
 import { BlurText } from '@/components/BlurText'
 import { InfiniteSlider } from '@/components/InfiniteSlider'
+import { HeroImageSlider } from '@/components/HeroImageSlider'
 import { SEO } from '@/components/SEO'
 import { useContent } from '@/hooks/useContent'
 import { useCompanySettings } from '@/hooks/useCompanySettings'
+import { useHeroContent } from '@/hooks/useHeroContent'
 
 export default function App() {
   const { content, loading, reloadTeamContent } = useContent()
   const { settings: companySettings, loading: settingsLoading } = useCompanySettings()
+  const { currentHero, loading: heroLoading } = useHeroContent()
 
     const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
@@ -59,7 +62,7 @@ export default function App() {
     return () => clearInterval(interval)
   }, [reloadTeamContent])
 
-  if (loading || settingsLoading) {
+  if (loading || settingsLoading || heroLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
@@ -94,8 +97,8 @@ export default function App() {
   return (
     <>
       <SEO
-        title={content?.hero?.title ? `${content.hero.title} - ${companySettings?.company_name || 'PT Quasar Capital'}` : undefined}
-        description={content?.hero?.description || companySettings?.meta_description}
+        title={currentHero?.title ? `${currentHero.title} - ${companySettings?.company_name || 'PT Quasar Capital'}` : undefined}
+        description={currentHero?.description || companySettings?.meta_description}
         keywords={companySettings?.meta_keywords || "investment advisory, financial consulting, PT Quasar Capital, M&A advisory, corporate restructuring, Indonesia investment"}
         canonical={companySettings?.website_url || "https://quasarcapital.co.id"}
         ogImage={companySettings?.og_image_url || "/hero-og-image.jpg"}
@@ -104,7 +107,7 @@ export default function App() {
           "@context": "https://schema.org",
           "@type": "ProfessionalService",
           "name": companySettings?.company_name || "PT Quasar Capital",
-          "description": companySettings?.company_description || content?.hero?.description,
+          "description": companySettings?.company_description || currentHero?.description,
           "provider": {
             "@type": "Organization",
             "name": companySettings?.company_name || "PT Quasar Capital",
@@ -217,8 +220,22 @@ export default function App() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
 
         <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-12 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
+            {/* Mobile/Tablet: Slider di atas */}
+            <div className="lg:hidden">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mb-8"
+              >
+                <HeroImageSlider />
+              </motion.div>
+            </div>
+
+            {/* Hero Content */}
             <div className="space-y-8">
+              {/* Hero Badge */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -227,45 +244,45 @@ export default function App() {
                 <span
                   className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium"
                   style={{
-                    backgroundColor: content.hero.colors?.trustedBadgeBgColor || "#dbeafe",
-                    borderColor: content.hero.colors?.trustedBadgeTextColor || "#1e40af",
-                    color: content.hero.colors?.trustedBadgeTextColor || "#1e40af"
+                    backgroundColor: currentHero?.colors?.trustedBadgeBgColor || "#dbeafe",
+                    borderColor: currentHero?.colors?.trustedBadgeTextColor || "#1e40af",
+                    color: currentHero?.colors?.trustedBadgeTextColor || "#1e40af"
                   }}
                 >
                   <span className="relative flex h-2 w-2">
                     <span
                       className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                      style={{ backgroundColor: content.hero.colors?.trustedBadgeTextColor || "#1e40af" }}
+                      style={{ backgroundColor: currentHero?.colors?.trustedBadgeTextColor || "#1e40af" }}
                     ></span>
                     <span
                       className="relative inline-flex rounded-full h-2 w-2"
-                      style={{ backgroundColor: content.hero.colors?.trustedBadgeTextColor || "#1e40af" }}
+                      style={{ backgroundColor: currentHero?.colors?.trustedBadgeTextColor || "#1e40af" }}
                     ></span>
                   </span>
-                  {content.hero.trustedText}
+                  {currentHero?.trusted_text || 'Trusted by Industry Leaders'}
                 </span>
               </motion.div>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <h1 id="hero-heading">
                   <BlurText
-                    text={content.hero.title}
+                    text={currentHero?.title || 'Leading Investment Advisory Firm'}
                     delay={50}
                     animateBy="words"
                     direction="bottom"
-                    className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
-                    style={{ color: content.hero.colors?.titleColor || "#111827" }}
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
+                    style={{ color: currentHero?.colors?.titleColor || "#111827" }}
                   />
                 </h1>
 
                 <h2>
                   <BlurText
-                    text={content.hero.subtitle}
+                    text={currentHero?.subtitle || 'Strategic Financial Solutions for Sustainable Growth'}
                     delay={40}
                     animateBy="words"
                     direction="bottom"
-                    className="text-2xl md:text-3xl font-semibold"
-                    style={{ color: content.hero.colors?.subtitleColor || "#dc2626" }}
+                    className="text-xl md:text-2xl font-semibold"
+                    style={{ color: currentHero?.colors?.subtitleColor || "#dc2626" }}
                   />
                 </h2>
 
@@ -273,10 +290,10 @@ export default function App() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
-                  className="text-lg max-w-xl"
-                  style={{ color: content.hero.colors?.descriptionColor || "#4b5563" }}
+                  className="text-base max-w-lg leading-relaxed"
+                  style={{ color: currentHero?.colors?.descriptionColor || "#4b5563" }}
                 >
-                  {content.hero.description}
+                  {currentHero?.description || 'We provide expert investment advisory services to help businesses achieve their financial goals.'}
                 </motion.p>
               </div>
 
@@ -294,37 +311,17 @@ export default function App() {
                   Our Services
                 </Button>
               </motion.div>
+            </div>
 
-              </div>
-
-            <div className="space-y-6">
-              {[
-                { icon: TrendingUp, title: "Investment Strategy", description: "Data-driven investment solutions" },
-                { icon: Shield, title: "Risk Management", description: "Comprehensive risk assessment" },
-                { icon: Users, title: "Expert Advisory", description: "Seasoned financial professionals" }
-              ].map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-                  className="group relative bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-300 hover:border-sky-300"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-sky-100 flex items-center justify-center group-hover:bg-sky-200 transition-colors">
-                      <feature.icon className="w-6 h-6 text-sky-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {feature.title}
-                      </h3>
-                      <p className="text-gray-600">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+            {/* Desktop: Slider di sebelah kanan */}
+            <div className="hidden lg:block">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
+                <HeroImageSlider />
+              </motion.div>
             </div>
           </div>
         </div>

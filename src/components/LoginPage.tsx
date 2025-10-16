@@ -3,12 +3,14 @@ import { Navigate } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
+import { useCompanySettings } from '@/hooks/useCompanySettings'
 import { RECAPTCHA_SITE_KEY, RECAPTCHA_ENABLED } from '@/config/recaptcha'
 import { Eye, EyeOff, Lock, Mail, Building2, Shield } from 'lucide-react'
 import ReCAPTCHA from 'react-google-recaptcha'
 
 export function LoginPage() {
   const { user, signIn } = useAuth()
+  const { settings: companySettings, loading: settingsLoading } = useCompanySettings()
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -19,6 +21,18 @@ export function LoginPage() {
 
   if (user) {
     return <Navigate to="/admin" replace />
+  }
+
+  // Show loading state while company settings are being fetched
+  if (settingsLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 to-gray-100 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
   }
 
   const handleRecaptchaChange = (token: string | null) => {
@@ -63,11 +77,23 @@ export function LoginPage() {
         {/* Logo and Brand */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-sky-900 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">Q</span>
-            </div>
+            {companySettings?.logo_url ? (
+              <img
+                src={companySettings.logo_url}
+                alt={`${companySettings.company_name} Logo`}
+                className="w-12 h-12 object-contain rounded-lg"
+              />
+            ) : (
+              <div className="w-12 h-12 bg-sky-900 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">
+                  {companySettings?.company_name?.charAt(0) || 'Q'}
+                </span>
+              </div>
+            )}
             <div className="text-left">
-              <h1 className="text-xl font-bold text-gray-900">PT Quasar Capital</h1>
+              <h1 className="text-xl font-bold text-gray-900">
+                {companySettings?.company_name || 'PT Quasar Capital'}
+              </h1>
               <p className="text-xs text-gray-500">Admin Portal</p>
             </div>
           </div>
@@ -174,7 +200,9 @@ export function LoginPage() {
         <div className="mt-8 text-center">
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
             <Building2 className="w-4 h-4" />
-            <span>Investment Advisory Excellence Since 1994</span>
+            <span>
+              {companySettings?.company_tagline || 'Investment Advisory Excellence'}
+            </span>
           </div>
         </div>
       </div>

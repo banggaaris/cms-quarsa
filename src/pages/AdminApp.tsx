@@ -7,6 +7,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 const Dashboard = React.lazy(() => import('@/components/admin/Dashboard').then(module => ({ default: module.Dashboard })))
 const HeroEditor = React.lazy(() => import('@/components/admin/HeroEditor').then(module => ({ default: module.HeroEditor })))
 const HeroPage = React.lazy(() => import('@/components/admin/HeroPage').then(module => ({ default: module.HeroPage })))
+const HeroSlidesEditor = React.lazy(() => import('@/components/admin/HeroSlidesEditor').then(module => ({ default: module.HeroSlidesEditor })))
 const TeamEditor = React.lazy(() => import('@/components/admin/TeamEditor').then(module => ({ default: module.TeamEditor })))
 const ServicesEditor = React.lazy(() => import('@/components/admin/ServicesEditor').then(module => ({ default: module.ServicesEditor })))
 const AboutEditor = React.lazy(() => import('@/components/admin/AboutEditor').then(module => ({ default: module.AboutEditor })))
@@ -37,6 +38,7 @@ export default function AdminApp() {
           <Route path="/" element={<AdminRouteWrapper><Dashboard /></AdminRouteWrapper>} />
           <Route path="/hero" element={<AdminRouteWrapper><HeroEditor /></AdminRouteWrapper>} />
           <Route path="/hero/:uuid" element={<AdminRouteWrapper><HeroPage /></AdminRouteWrapper>} />
+          <Route path="/hero-slides" element={<AdminRouteWrapper><HeroSlidesEditor /></AdminRouteWrapper>} />
           <Route path="/about" element={<AdminRouteWrapper><AboutEditor /></AdminRouteWrapper>} />
           <Route path="/team" element={<AdminRouteWrapper><TeamEditor /></AdminRouteWrapper>} />
           <Route path="/services" element={<AdminRouteWrapper><ServicesEditor /></AdminRouteWrapper>} />

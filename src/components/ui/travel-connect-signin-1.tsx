@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCompanySettings } from "@/hooks/useCompanySettings";
 import { RECAPTCHA_SITE_KEY, RECAPTCHA_ENABLED } from "@/config/recaptcha";
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -246,6 +247,7 @@ const DotMap = () => {
 
 const SignInCard = () => {
   const { signIn } = useAuth();
+  const { settings: companySettings, loading: settingsLoading } = useCompanySettings();
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
@@ -254,6 +256,18 @@ const SignInCard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+
+  // Show loading state while company settings are being fetched
+  if (settingsLoading) {
+    return (
+      <div className="flex w-full h-full items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaToken(token);
@@ -286,9 +300,19 @@ const SignInCard = () => {
                 transition={{ delay: 0.6, duration: 0.5 }}
                 className="mb-6"
               >
-                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-200">
-                  <span className="text-white font-bold text-xl">Q</span>
-                </div>
+                {companySettings?.logo_url ? (
+                  <img
+                    src={companySettings.logo_url}
+                    alt={`${companySettings.company_name} Logo`}
+                    className="h-12 w-12 object-contain rounded-full shadow-lg shadow-sky-200"
+                  />
+                ) : (
+                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-200">
+                    <span className="text-white font-bold text-xl">
+                      {companySettings?.company_name?.charAt(0) || 'Q'}
+                    </span>
+                  </div>
+                )}
               </motion.div>
               <motion.h2
                 initial={{ opacity: 0, y: -20 }}
@@ -296,7 +320,7 @@ const SignInCard = () => {
                 transition={{ delay: 0.7, duration: 0.5 }}
                 className="text-3xl font-bold mb-2 text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-blue-600"
               >
-                PT Quasar Capital
+                {companySettings?.company_name || 'PT Quasar Capital'}
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, y: -20 }}
@@ -304,7 +328,7 @@ const SignInCard = () => {
                 transition={{ delay: 0.8, duration: 0.5 }}
                 className="text-sm text-center text-gray-600 max-w-xs"
               >
-                Sign in to access your admin dashboard and manage your investment advisory content
+                Sign in to access your admin dashboard and manage your {companySettings?.company_tagline?.toLowerCase() || 'investment advisory'} content
               </motion.p>
             </div>
           </div>
@@ -448,12 +472,7 @@ const SignInCard = () => {
                 </Button>
               </motion.div>
 
-              <div className="text-center mt-6">
-                <a href="#" className="text-blue-600 hover:text-blue-700 text-sm transition-colors">
-                  Forgot password?
-                </a>
-              </div>
-
+  
               {RECAPTCHA_ENABLED && (
                 <div className="text-center mt-4">
                   <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
