@@ -47,28 +47,28 @@ const defaultContent: WebsiteContent = {
       title: "Investment Advisory",
       description: "Strategic investment guidance to maximize portfolio returns and minimize risks",
       icon: "Target",
-      features: ["Portfolio Management", "Risk Assessment", "Market Analysis"]
+      order_list: 0
     },
     {
       id: "2",
       title: "Corporate Restructuring",
       description: "Comprehensive restructuring solutions for distressed businesses",
       icon: "Shield",
-      features: ["Debt Restructuring", "Operational Efficiency", "Strategic Planning"]
+      order_list: 1
     },
     {
       id: "3",
       title: "M&A Advisory",
       description: "End-to-end merger and acquisition services",
       icon: "TrendingUp",
-      features: ["Due Diligence", "Valuation", "Negotiation Support"]
+      order_list: 2
     },
     {
       id: "4",
       title: "Financial Consulting",
       description: "Expert financial analysis and planning services",
       icon: "BarChart3",
-      features: ["Financial Modeling", "Budget Planning", "Performance Analysis"]
+      order_list: 3
     }
   ],
   team: [
@@ -218,7 +218,7 @@ export function useContent() {
       const { data: servicesData, error: servicesError } = await supabase
         .from('service_content')
         .select('*')
-        .order('order_index', { ascending: true })
+        .order('order_list', { ascending: true })
 
       if (servicesError) {
         console.error('Error loading services:', servicesError)
@@ -228,7 +228,7 @@ export function useContent() {
           title: service.title,
           description: service.description,
           icon: service.icon,
-          features: service.features || []
+          order_list: service.order_list || 0
         }))
         setContent(prev => ({ ...prev, services }))
       }
@@ -467,6 +467,30 @@ export function useContent() {
     }
   }
 
+  const reloadServicesContent = async () => {
+    try {
+      const { data: servicesData, error: servicesError } = await supabase
+        .from('service_content')
+        .select('*')
+        .order('order_list', { ascending: true })
+
+      if (servicesError) {
+        console.error('Error reloading services:', servicesError)
+      } else if (servicesData) {
+        const services: Service[] = servicesData.map(service => ({
+          id: service.id,
+          title: service.title,
+          description: service.description,
+          icon: service.icon,
+          order_list: service.order_list || 0
+        }))
+        setContent(prev => ({ ...prev, services }))
+      }
+    } catch (error) {
+      console.error('Error reloading services:', error)
+    }
+  }
+
   const updateCredentials = (credentials: Credential[]) => {
     setContent(prev => ({ ...prev, credentials }))
   }
@@ -494,6 +518,7 @@ export function useContent() {
     updateServices,
     updateTeam,
     reloadTeamContent,
+    reloadServicesContent,
     updateCredentials,
     updateClients,
     updateGallery,

@@ -6,7 +6,7 @@ export interface Service {
   title: string
   description: string
   icon: string
-  features: string[]
+  order_list: number
 }
 
 export function useServicesContent() {
@@ -22,7 +22,7 @@ export function useServicesContent() {
       const { data, error } = await supabase
         .from('service_content')
         .select('*')
-        .order('order_index', { ascending: true })
+        .order('order_list', { ascending: true })
 
       if (error) {
         console.error('Error loading services:', error)
@@ -32,7 +32,7 @@ export function useServicesContent() {
           title: service.title,
           description: service.description,
           icon: service.icon,
-          features: service.features || []
+          order_list: service.order_list || 0
         }))
         setServices(servicesData)
       }

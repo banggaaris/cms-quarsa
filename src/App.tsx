@@ -33,12 +33,18 @@ import { BlurText } from '@/components/BlurText'
 import { InfiniteSlider } from '@/components/InfiniteSlider'
 import { HeroImageSlider } from '@/components/HeroImageSlider'
 import { SEO } from '@/components/SEO'
+import {
+  ServicesContainer,
+  ServiceCard,
+  ServicesHeader
+} from '@/components/ServicesMotion'
+import { ServiceDetailModal } from '@/components/ServiceDetailModal'
 import { useContent } from '@/hooks/useContent'
 import { useCompanySettings } from '@/hooks/useCompanySettings'
 import { useHeroContent } from '@/hooks/useHeroContent'
 
 export default function App() {
-  const { content, loading, reloadTeamContent } = useContent()
+  const { content, loading, reloadTeamContent, reloadServicesContent } = useContent()
   const { settings: companySettings, loading: settingsLoading } = useCompanySettings()
   const { currentHero, loading: heroLoading } = useHeroContent()
 
@@ -46,6 +52,7 @@ export default function App() {
   const [activeSection, setActiveSection] = useState('home')
   const [scrollY, setScrollY] = useState(0)
   const [selectedMember, setSelectedMember] = useState<any>(null)
+  const [selectedService, setSelectedService] = useState<any>(null)
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -61,6 +68,15 @@ export default function App() {
 
     return () => clearInterval(interval)
   }, [reloadTeamContent])
+
+  // Reload services content every 30 seconds to pick up database changes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      reloadServicesContent()
+    }, 30000)
+
+    return () => clearInterval(interval)
+  }, [reloadServicesContent])
 
   if (loading || settingsLoading || heroLoading) {
     return (
@@ -372,19 +388,12 @@ export default function App() {
       {/* Services Section */}
       <section id="services" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <Badge className="mb-4 bg-sky-100 text-sky-800 border-sky-200">Our Services</Badge>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Comprehensive Financial Solutions
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We offer a full spectrum of investment advisory services designed to meet
-              the diverse needs of our clients across various industries.
-            </p>
-          </div>
+          {/* Animated Header */}
+          <ServicesHeader />
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {content.services.map((service, index) => {
+          {/* Animated Service Cards */}
+          <ServicesContainer>
+            {[...content.services].sort((a, b) => (a.order_list || 0) - (b.order_list || 0)).map((service) => {
               const IconComponent = () => {
                 switch(service.icon) {
                   case 'Target': return <Target className="w-8 h-8" />
@@ -396,40 +405,29 @@ export default function App() {
               }
 
               return (
-                <Card key={service.id} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                  <CardHeader className="text-center pb-4">
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-lg flex items-center justify-center text-white ${
-                      index === 0 ? 'bg-sky-600' :
-                      index === 1 ? 'bg-red-600' :
-                      index === 2 ? 'bg-amber-600' :
-                      'bg-sky-600'
-                    }`}>
-                      <IconComponent />
-                    </div>
-                    <CardTitle className="text-xl font-bold">{service.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-center space-y-4">
-                    <p className="text-gray-600">{service.description}</p>
-                    <div className="space-y-2">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center justify-center gap-2 text-sm text-gray-500">
-                          <CheckCircle className="w-4 h-4 text-sky-600" />
-                          {feature}
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                  index={service.order_list || 0}
+                  iconComponent={<IconComponent />}
+                  onClick={() => setSelectedService(service)}
+                />
               )
             })}
-          </div>
+          </ServicesContainer>
         </div>
       </section>
 
       {/* Team Section */}
       <section id="team" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
             <Badge className="mb-4 bg-sky-100 text-sky-800 border-sky-200">Our Team</Badge>
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
               Expert Leadership Team
@@ -438,50 +436,159 @@ export default function App() {
               Our team brings together decades of experience from leading financial institutions
               and consulting firms worldwide.
             </p>
-          </div>
+          </motion.div>
 
-          <div className={`grid gap-8 max-w-6xl mx-auto ${
+          <div className={`grid gap-6 max-w-6xl mx-auto ${
             content.team.length === 1
-              ? 'grid-cols-1 max-w-md'
+              ? 'grid-cols-1 max-w-xs'
               : content.team.length === 2
-              ? 'grid-cols-1 md:grid-cols-2 max-w-4xl'
+              ? 'grid-cols-1 md:grid-cols-2 max-w-lg'
               : content.team.length === 3
-              ? 'grid-cols-1 md:grid-cols-3'
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-4xl'
               : content.team.length === 4
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 max-w-5xl'
               : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
           }`}>
-            {content.team.map((member) => (
-              <Card
+            {content.team.map((member, index) => (
+              <motion.div
                 key={member.id}
-                className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-1"
+                initial={{
+                  opacity: 0,
+                  y: 60,
+                  scale: 0.9,
+                  rotateX: 15
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  rotateX: 0
+                }}
+                transition={{
+                  duration: 0.8,
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                  delay: index * 0.15
+                }}
+                whileHover={{
+                  y: -12,
+                  scale: 1.03,
+                  transition: { duration: 0.3 }
+                }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedMember(member)}
+                className="cursor-pointer"
               >
-                <CardHeader className="text-center">
-                  <div className="w-full aspect-square mx-auto mb-4 rounded-lg overflow-hidden border-4 border-sky-100">
-                    <img
-                      src={member.image}
-                      alt={`${member.name} - ${member.position} at PT Quasar Capital`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <CardTitle className="text-xl font-bold">{member.name}</CardTitle>
-                  <CardDescription className="text-red-600 font-semibold">
-                    {member.position}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <p className="text-sm text-gray-600">{member.expertise}</p>
-                  <div className="text-xs text-gray-500 space-y-1">
-                    <div>{member.experience} experience</div>
-                    <div>{member.education}</div>
-                  </div>
-                  <Button variant="outline" size="sm" className="w-full mt-4">
-                    View Profile
-                  </Button>
-                </CardContent>
-              </Card>
+                <motion.div
+                  className="border-0 shadow-lg hover:shadow-2xl transition-all duration-300 h-full group"
+                  whileHover={{
+                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                    transition: { duration: 0.3 }
+                  }}
+                >
+                  <Card className="border-0 shadow-none h-full bg-white rounded-2xl overflow-hidden">
+                    {/* Image Container with hover effect */}
+                    <motion.div
+                      className="relative aspect-[3/4] sm:aspect-[2/3] md:aspect-[3/4] lg:aspect-[4/5] overflow-hidden"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent z-10"></div>
+                      <div className="absolute inset-0 border-3 border-white/20 z-10 rounded-t-2xl"></div>
+                      <img
+                        src={member.image}
+                        alt={`${member.name} - ${member.position} at PT Quasar Capital`}
+                        className="w-full h-full object-cover object-top"
+                        loading="lazy"
+                        style={{
+                          filter: 'brightness(1.05) contrast(1.1)'
+                        }}
+                      />
+
+                      {/* Hover overlay */}
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-t from-sky-600/30 via-sky-600/10 to-transparent z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        initial={{ opacity: 0 }}
+                        whileHover={{ opacity: 1 }}
+                      >
+                        <div className="flex items-end justify-center h-full pb-4">
+                          <motion.div
+                            initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                            whileHover={{ scale: 1, opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: 0.1 }}
+                            className="bg-white/95 backdrop-blur-md rounded-xl px-3 py-1.5 shadow-lg"
+                          >
+                            <div className="flex items-center gap-1.5">
+                              <Users className="w-4 h-4 text-sky-600" />
+                              <span className="text-xs font-medium text-gray-800">View Profile</span>
+                            </div>
+                          </motion.div>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+
+                    <CardHeader className="text-center pb-3 px-3">
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.15 + 0.3 }}
+                        viewport={{ once: true }}
+                      >
+                        <CardTitle className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-sky-700 transition-colors duration-300 line-clamp-1">
+                          {member.name}
+                        </CardTitle>
+                        <CardDescription className="text-red-600 font-semibold text-sm">
+                          {member.position}
+                        </CardDescription>
+                      </motion.div>
+                    </CardHeader>
+
+                    <CardContent className="text-center space-y-3 px-3 pb-4">
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.15 + 0.4 }}
+                        viewport={{ once: true }}
+                      >
+                        <p className="text-xs text-gray-600 line-clamp-2">{member.expertise}</p>
+                      </motion.div>
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.15 + 0.5 }}
+                        viewport={{ once: true }}
+                        className="text-xs text-gray-500 space-y-1"
+                      >
+                        <div className="flex items-center justify-center gap-1">
+                          <Briefcase className="w-3 h-3" />
+                          <span className="text-xs">{member.experience}</span>
+                        </div>
+                        <div className="flex items-center justify-center gap-1">
+                          <Award className="w-3 h-3" />
+                          <span className="text-xs">{member.education}</span>
+                        </div>
+                      </motion.div>
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.15 + 0.6 }}
+                        viewport={{ once: true }}
+                      >
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full border-sky-200 text-sky-700 hover:bg-sky-50 hover:border-sky-300 group-hover:border-sky-400 group-hover:bg-sky-100 transition-all duration-300 text-xs"
+                        >
+                          View Profile
+                        </Button>
+                      </motion.div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -497,7 +604,7 @@ export default function App() {
                 {/* Photo Section - Mobile */}
                 <div className="flex justify-center pb-6">
                   <div className="relative group">
-                    <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-xl overflow-hidden border-4 border-white shadow-lg">
+                    <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-xl overflow-hidden border-4 border-white shadow-lg">
                       <img
                         src={selectedMember.image}
                         alt={`${selectedMember.name} - ${selectedMember.position} at PT Quasar Capital`}
@@ -613,9 +720,9 @@ export default function App() {
               {/* Desktop Layout - Two Columns */}
               <div className="hidden lg:flex gap-8 h-full">
                 {/* Left Column - Photo */}
-                <div className="flex-shrink-0 w-1/3 flex flex-col items-center justify-center">
+                <div className="flex-shrink-0 w-1/4 flex flex-col items-center justify-center">
                   <div className="relative group">
-                    <div className="w-65 h-65 rounded-xl overflow-hidden border-4 border-white shadow-lg">
+                    <div className="w-40 h-40 rounded-xl overflow-hidden border-4 border-white shadow-lg">
                       <img
                         src={selectedMember.image}
                         alt={`${selectedMember.name} - ${selectedMember.position} at PT Quasar Capital`}
@@ -731,6 +838,13 @@ export default function App() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Service Detail Modal */}
+      <ServiceDetailModal
+        service={selectedService}
+        isOpen={!!selectedService}
+        onClose={() => setSelectedService(null)}
+      />
 
       {/* Credentials Section */}
       <section id="credentials" className="py-24 bg-white">

@@ -47,28 +47,28 @@ const defaultContent: WebsiteContent = {
       title: "Investment Advisory",
       description: "Strategic investment guidance to maximize portfolio returns and minimize risks",
       icon: "Target",
-      features: ["Portfolio Management", "Risk Assessment", "Market Analysis"]
+      order_list: 0
     },
     {
       id: "2",
       title: "Corporate Restructuring",
       description: "Comprehensive restructuring solutions for distressed businesses",
       icon: "Shield",
-      features: ["Debt Restructuring", "Operational Efficiency", "Strategic Planning"]
+      order_list: 1
     },
     {
       id: "3",
       title: "M&A Advisory",
       description: "End-to-end merger and acquisition services",
       icon: "TrendingUp",
-      features: ["Due Diligence", "Valuation", "Negotiation Support"]
+      order_list: 2
     },
     {
       id: "4",
       title: "Financial Consulting",
       description: "Expert financial analysis and planning services",
       icon: "BarChart3",
-      features: ["Financial Modeling", "Budget Planning", "Performance Analysis"]
+      order_list: 3
     }
   ],
   team: [
@@ -209,7 +209,7 @@ export function useAdminContent() {
       const { data: servicesData, error: servicesError } = await supabase
         .from('service_content')
         .select('*')
-        .order('order_index', { ascending: true })
+        .order('order_list', { ascending: true })
 
       if (servicesError) {
         console.error('Error loading services:', servicesError)
@@ -219,7 +219,7 @@ export function useAdminContent() {
           title: service.title,
           description: service.description,
           icon: service.icon,
-          features: service.features || []
+          order_list: service.order_list || 0
         }))
         setContent(prev => ({ ...prev, services }))
       }
@@ -528,6 +528,43 @@ export function useAdminContent() {
     setContent(prev => ({ ...prev, services }))
   }
 
+  const updateServicesDatabase = async (services: Service[]) => {
+    try {
+      // First, clear existing service content
+      await supabase
+        .from('service_content')
+        .delete()
+        .neq('id', 'impossible-id') // Delete all records
+
+      // Insert updated services
+      if (services.length > 0) {
+        const servicesPayload = services.map((service, index) => ({
+          id: service.id.startsWith('temp-') ? undefined : service.id,
+          title: service.title,
+          description: service.description,
+          icon: service.icon,
+          order_list: service.order_list || index
+        }))
+
+        const { error } = await supabase
+          .from('service_content')
+          .upsert(servicesPayload, { onConflict: 'id' })
+
+        if (error) {
+          console.error('Error updating service content:', error)
+          return false
+        }
+      }
+
+      // Update local state
+      setContent(prev => ({ ...prev, services }))
+      return true
+    } catch (error) {
+      console.error('Error updating services:', error)
+      return false
+    }
+  }
+
   const updateTeam = async (team: TeamMember[]) => {
     try {
       // First, clear existing team content
@@ -649,6 +686,7 @@ export function useAdminContent() {
     unpublishHero,
     updateAbout,
     updateServices,
+    updateServicesDatabase,
     updateTeam,
     updateCredentials,
     updateClients,
