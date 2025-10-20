@@ -350,13 +350,13 @@ export default function App() {
             <div className="space-y-8">
               <div>
                 <Badge className="mb-4 bg-sky-100 text-sky-800 border-sky-200">About Us</Badge>
-                <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                <h2 className="text-3xl font-bold text-gray-900 mb-6">
                   {content.about.title}
                 </h2>
-                <p className="text-lg text-gray-600 mb-6 text-justify">
+                <p className="text-base text-gray-600 mb-6 text-justify">
                   {content.about.description1}
                 </p>
-                <p className="text-lg text-gray-600 mb-6 text-justify">
+                <p className="text-base text-gray-600 mb-6 text-justify">
                   {content.about.description2}
                 </p>
               </div>
@@ -370,13 +370,13 @@ export default function App() {
                   background: `linear-gradient(to bottom right, ${content.about.gradientFromColor || '#0c4a6e'}, ${content.about.gradientToColor || '#111827'})`
                 }}
               >
-                <h3 className="text-2xl font-bold mb-6">Our Mission</h3>
-                <p className="text-lg mb-6 text-justify">
+                <h3 className="text-xl font-bold mb-6">Our Mission</h3>
+                <p className="text-base mb-6 text-justify">
                   {content.about.mission || 'Loading mission...'}
                 </p>
                 <Separator className="bg-white/20 my-6" />
-                <h3 className="text-2xl font-bold mb-6">Our Vision</h3>
-                <p className="text-lg text-justify">
+                <h3 className="text-xl font-bold mb-6">Our Vision</h3>
+                <p className="text-base text-justify">
                   {content.about.vision || 'Loading vision...'}
                 </p>
               </div>
@@ -1347,7 +1347,7 @@ export default function App() {
           <Separator className="bg-gray-800 my-8" />
 
           <div className="text-center text-sm text-gray-400">
-            <p>&copy; 2024 {companySettings?.company_name || 'PT Quasar Capital'}. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} {companySettings?.company_name || 'PT Quasar Capital'}. All rights reserved.</p>
           </div>
         </div>
       </footer>
