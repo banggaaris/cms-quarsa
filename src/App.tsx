@@ -973,6 +973,7 @@ export default function App() {
             speed={40}
             pauseOnHover={true}
             direction="left"
+            loading={loading}
           />
         </motion.div>
 
