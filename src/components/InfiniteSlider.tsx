@@ -36,8 +36,21 @@ export const InfiniteSlider = ({
             className="flex-shrink-0 w-80 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100"
           >
             <div className="text-center space-y-4">
-              <div className="w-16 h-16 mx-auto bg-sky-100 rounded-lg flex items-center justify-center">
-                <Building className="w-8 h-8 text-sky-600" />
+              <div className="w-16 h-16 mx-auto bg-sky-100 rounded-lg overflow-hidden flex items-center justify-center">
+                {item.logo_url ? (
+                  <img
+                    src={item.logo_url}
+                    alt={`${item.name} logo`}
+                    className="w-full h-full object-contain p-2"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                      e.currentTarget.nextElementSibling?.classList.remove('hidden')
+                    }}
+                  />
+                ) : null}
+                <div className={`${item.logo_url ? 'hidden' : ''} w-full h-full flex items-center justify-center`}>
+                  <Building className="w-8 h-8 text-sky-600" />
+                </div>
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
