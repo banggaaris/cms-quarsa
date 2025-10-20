@@ -150,7 +150,7 @@ export default function App() {
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-4">
               {companySettings?.logo_url ? (
-                <div className="w-12 h-12 rounded-lg overflow-hidden border-2 border-sky-100">
+                <div className="w-12 h-12 rounded-lg overflow-hidden">
                   <img
                     src={companySettings.logo_url}
                     alt={companySettings.company_name}
@@ -1227,7 +1227,7 @@ export default function App() {
             <div>
               <div className="flex items-center gap-4 mb-4">
                 {companySettings?.logo_url ? (
-                  <div className="w-10 h-10 rounded-lg overflow-hidden border-2 border-sky-600">
+                  <div className="w-10 h-10 rounded-lg overflow-hidden">
                     <img
                       src={companySettings.logo_url}
                       alt={companySettings.company_name}
