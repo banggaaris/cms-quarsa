@@ -734,13 +734,7 @@ export default function App() {
             className="text-center mb-16"
           >
             <Badge className="mb-4 bg-sky-100 text-sky-800 border-sky-200">Credentials</Badge>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Professional Certifications & Awards
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our commitment to excellence is reflected in our professional certifications,
-              licenses, and industry recognition.
-            </p>
+            
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
