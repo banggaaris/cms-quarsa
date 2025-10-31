@@ -49,33 +49,29 @@ function SortableClientCard({ client, onEdit, onDelete }: {
   return (
     <div ref={setNodeRef} style={style} className="relative">
       <Card className={`${isDragging ? 'shadow-2xl border-sky-400' : ''} transition-all duration-200`}>
-        <CardHeader className="pb-4">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div
-                {...attributes}
-                {...listeners}
-                className="cursor-grab active:cursor-grabbing"
-              >
-                <GripVertical className="w-5 h-5 text-gray-400 hover:text-gray-600" />
-              </div>
+        <CardHeader className="pb-0">
+          <div className="flex items-center justify-between">
+            <div
+              {...attributes}
+              {...listeners}
+              className="cursor-grab active:cursor-grabbing"
+            >
+              <GripVertical className="w-5 h-5 text-gray-400 hover:text-gray-600" />
+            </div>
+            <div className="flex-1 flex justify-center">
               {client.logo_url ? (
                 <img
                   src={client.logo_url}
-                  alt={client.name}
-                  className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                  alt="Client logo"
+                  className="w-20 h-20 object-contain rounded-lg bg-white p-4 border border-gray-200"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none'
                     e.currentTarget.nextElementSibling?.classList.remove('hidden')
                   }}
                 />
               ) : null}
-              <div className="w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center text-sky-600 flex-shrink-0 hidden">
-                <Building className="w-6 h-6" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-semibold text-gray-900 truncate">{client.name}</h3>
-                <p className="text-sm text-gray-500 truncate">{client.industry}</p>
+              <div className={`${client.logo_url ? 'hidden' : ''} w-20 h-20 bg-sky-100 rounded-lg flex items-center justify-center text-sky-600 border border-gray-200`}>
+                <Building className="w-10 h-10" />
               </div>
             </div>
             <div className="flex gap-1 flex-shrink-0">
@@ -88,17 +84,6 @@ function SortableClientCard({ client, onEdit, onDelete }: {
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            <p className="text-sm text-gray-600 line-clamp-3">{client.description}</p>
-            {client.logo_url && (
-              <div className="flex items-center gap-1 text-xs text-blue-600">
-                <LinkIcon className="w-3 h-3" />
-                <span className="truncate">Logo added</span>
-              </div>
-            )}
-          </div>
-        </CardContent>
       </Card>
     </div>
   );
@@ -201,8 +186,8 @@ export function ClientsEditor() {
         }
       } else {
         // Add new client
-        const { name, industry, description, logo_url } = client
-        const success = await addClient({ name, industry, description, logo_url })
+        const { name, logo_url } = client
+        const success = await addClient({ name, logo_url })
         if (success) {
           setSaveStatus('success')
           setSuccessMessage('Client created successfully!')
@@ -342,33 +327,7 @@ export function ClientsEditor() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Industry *
-                </label>
-                <input
-                  type="text"
-                  value={editingClient.industry}
-                  onChange={(e) => setEditingClient({...editingClient, industry: e.target.value})}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
-                  placeholder="e.g., Banking & Financial Services"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description *
-                </label>
-                <textarea
-                  value={editingClient.description}
-                  onChange={(e) => setEditingClient({...editingClient, description: e.target.value})}
-                  rows={4}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
-                  placeholder="Brief description of the client and your relationship with them..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Logo URL
+                  Logo URL *
                 </label>
                 <input
                   type="url"
@@ -376,6 +335,7 @@ export function ClientsEditor() {
                   onChange={(e) => setEditingClient({...editingClient, logo_url: e.target.value})}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
                   placeholder="https://example.com/logo.png"
+                  required
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Enter a valid URL for the client's logo image
@@ -407,7 +367,7 @@ export function ClientsEditor() {
                 </Button>
                 <Button
                   onClick={() => handleSaveClient(editingClient)}
-                  disabled={!editingClient.name?.trim() || !editingClient.industry?.trim() || !editingClient.description?.trim() || saving}
+                  disabled={!editingClient.name?.trim() || !editingClient.logo_url?.trim() || saving}
                 >
                   {saving ? 'Saving...' : 'Save Client'}
                 </Button>

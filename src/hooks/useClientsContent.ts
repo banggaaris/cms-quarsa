@@ -55,14 +55,6 @@ export function useClientsContent() {
         setError('Client name is required')
         return null
       }
-      if (!clientData.industry?.trim()) {
-        setError('Industry is required')
-        return null
-      }
-      if (!clientData.description?.trim()) {
-        setError('Description is required')
-        return null
-      }
 
       // Get the highest order_index to append at the end
       const { data: existingClients } = await supabase
@@ -77,8 +69,6 @@ export function useClientsContent() {
         .from('client_content')
         .insert({
           name: clientData.name.trim(),
-          industry: clientData.industry.trim(),
-          description: clientData.description.trim(),
           logo_url: clientData.logo_url?.trim() || null,
           order_index: nextOrderIndex
         })
@@ -119,21 +109,11 @@ export function useClientsContent() {
         setError('Client name cannot be empty')
         return null
       }
-      if (clientData.industry !== undefined && !clientData.industry?.trim()) {
-        setError('Industry cannot be empty')
-        return null
-      }
-      if (clientData.description !== undefined && !clientData.description?.trim()) {
-        setError('Description cannot be empty')
-        return null
-      }
 
       const { data, error: updateError } = await supabase
         .from('client_content')
         .update({
           name: clientData.name?.trim(),
-          industry: clientData.industry?.trim(),
-          description: clientData.description?.trim(),
           logo_url: clientData.logo_url?.trim() || null
         })
         .eq('id', id)

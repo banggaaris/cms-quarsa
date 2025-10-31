@@ -48,16 +48,17 @@ export const ManualSlider = ({
     setCurrentIndex(index);
   };
 
-  // Calculate visible cards based on total number of clients
+  // Calculate visible cards based on total number of clients (now showing larger logos)
   const getVisibleCount = () => {
     const totalItems = items.length;
 
-    if (totalItems <= 1) return 1;
-    if (totalItems === 2) return 2;
+    if (totalItems <= 2) return totalItems;
     if (totalItems === 3) return 3;
+    if (totalItems === 4) return 4;
+    if (totalItems === 5) return 5;
 
-    // For 4+ items, show max 3 at once to maintain good UX
-    return Math.min(3, totalItems);
+    // For 6+ items, show max 6 at once for larger logos
+    return Math.min(6, totalItems);
   };
 
   const visibleCount = getVisibleCount();
@@ -81,63 +82,44 @@ export const ManualSlider = ({
           {visibleItems.map((item, index) => (
             <div
               key={`${item.name}-${currentIndex}-${index}`}
-              className="flex-shrink-0 w-72 sm:w-80 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 border border-gray-100"
+              className="flex-shrink-0 w-48 h-48 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center border border-gray-100"
             >
-              <div className="text-center space-y-3 sm:space-y-4">
-                <div className="w-16 h-16 mx-auto bg-sky-100 rounded-lg overflow-hidden flex items-center justify-center">
-                  {item.logo_url ? (
-                    <img
-                      src={item.logo_url}
-                      alt={`${item.name || 'Client'} logo`}
-                      className="w-full h-full object-contain p-2"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none'
-                        e.currentTarget.nextElementSibling?.classList.remove('hidden')
-                      }}
-                      loading="lazy"
-                    />
-                  ) : null}
-                  <div className={`${item.logo_url ? 'hidden' : ''} w-full h-full flex items-center justify-center`}>
-                    <Building className="w-8 h-8 text-sky-600" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 truncate px-2">
-                    {item.name || 'Client Name'}
-                  </h3>
-                  <p className="text-sm font-semibold text-red-600 mt-1 truncate px-2">
-                    {item.industry || 'Industry'}
-                  </p>
-                </div>
-                <p className="text-sm text-gray-600 line-clamp-3 px-2">
-                  {item.description || 'Description not available'}
-                </p>
+              {item.logo_url ? (
+                <img
+                  src={item.logo_url}
+                  alt={`${item.name || 'Client'} logo`}
+                  className="w-36 h-36 object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none'
+                    e.currentTarget.nextElementSibling?.classList.remove('hidden')
+                  }}
+                  loading="lazy"
+                />
+              ) : null}
+              <div className={`${item.logo_url ? 'hidden' : ''} flex items-center justify-center`}>
+                <Building className="w-20 h-20 text-sky-600" />
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Navigation Arrows - only show if more clients than visible count */}
-      {items.length > visibleCount && (
-        <>
-          <button
-            onClick={handlePrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:text-sky-600 hover:bg-sky-50 transition-all duration-300 z-20 border border-gray-200"
-            aria-label="Previous clients"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
+      {/* Navigation Arrows - always visible */}
+      <button
+        onClick={handlePrevious}
+        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:text-sky-600 hover:bg-sky-50 transition-all duration-300 z-20 border border-gray-200"
+        aria-label="Previous clients"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
 
-          <button
-            onClick={handleNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:text-sky-600 hover:bg-sky-50 transition-all duration-300 z-20 border border-gray-200"
-            aria-label="Next clients"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </>
-      )}
+      <button
+        onClick={handleNext}
+        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:text-sky-600 hover:bg-sky-50 transition-all duration-300 z-20 border border-gray-200"
+        aria-label="Next clients"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
 
       {/* Dots Indicator - only show if more than 1 client */}
       {items.length > 1 && (
