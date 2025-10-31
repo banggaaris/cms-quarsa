@@ -43,6 +43,10 @@ const defaultContent: WebsiteContent = {
       team: "50+"
     }
   },
+  servicesSection: {
+    title: "Comprehensive Financial Solutions",
+    description: "We offer a full spectrum of investment advisory services designed to meet the diverse needs of our clients across various industries."
+  },
   services: [
     {
       id: "1",
@@ -325,6 +329,25 @@ export function useContent() {
         }))
       }
 
+      // Load services section content
+      const { data: servicesSectionData, error: servicesSectionError } = await supabase
+        .from('services_section_content')
+        .select('*')
+        .limit(1)
+        .single()
+
+      if (servicesSectionError && servicesSectionError.code !== 'PGRST116') {
+        // Error loading services section content
+      } else if (servicesSectionData) {
+        setContent(prev => ({
+          ...prev,
+          servicesSection: {
+            title: servicesSectionData.title,
+            description: servicesSectionData.description
+          }
+        }))
+      }
+
       // Load credential content
       const { data: credentialsData, error: credentialsError } = await supabase
         .from('credential_content')
@@ -511,6 +534,53 @@ export function useContent() {
     setContent(prev => ({ ...prev, contact: { ...prev.contact, ...contact } }))
   }
 
+  const updateServicesSection = (servicesSection: Partial<WebsiteContent['servicesSection']>) => {
+    setContent(prev => ({ ...prev, servicesSection: { ...prev.servicesSection, ...servicesSection } }))
+  }
+
+  const updateServicesSectionContent = async (servicesSection: Partial<WebsiteContent['servicesSection']>) => {
+    try {
+      const { data: existingData } = await supabase
+        .from('services_section_content')
+        .select('id')
+        .limit(1)
+        .single()
+
+      const payload = {
+        title: servicesSection.title || content.servicesSection.title,
+        description: servicesSection.description || content.servicesSection.description
+      }
+
+      let result
+      if (existingData?.id) {
+        result = await supabase
+          .from('services_section_content')
+          .update(payload)
+          .eq('id', existingData.id)
+      } else {
+        result = await supabase
+          .from('services_section_content')
+          .insert(payload)
+          .select()
+          .single()
+      }
+
+      if (result.error) {
+        // Error updating services section
+        return false
+      }
+
+      setContent(prev => ({
+        ...prev,
+        servicesSection: { ...prev.servicesSection, ...servicesSection }
+      }))
+      return true
+    } catch (error) {
+      // Error updating services section
+      return false
+    }
+  }
+
   return {
     content,
     loading,
@@ -526,6 +596,8 @@ export function useContent() {
     updateCredentials,
     updateClients,
     updateGallery,
-    updateContact
+    updateContact,
+    updateServicesSection,
+    updateServicesSectionContent
   }
 }

@@ -1,12 +1,13 @@
-import { useState } from 'react'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import React, { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { DeleteConfirmationModal } from './DeleteConfirmationModal'
 import { useAdminContent } from '@/hooks/useAdminContent'
+import { useContent } from '@/hooks/useContent'
 import { Service } from '@/types/content'
-import { Plus, Edit, Trash2, Eye, CheckCircle, AlertCircle, GripVertical, Briefcase } from 'lucide-react'
+import { Plus, Edit, Trash2, Eye, CheckCircle, AlertCircle, GripVertical, Briefcase, FileText, Settings } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import {
   DndContext,
@@ -106,12 +107,23 @@ function SortableServiceCard({ service, onEdit, onDelete }: {
 
 export function ServicesEditor() {
   const { content, updateServicesDatabase } = useAdminContent()
+  const { updateServicesSectionContent } = useContent()
+  const [activeTab, setActiveTab] = useState<'services' | 'section'>('services')
+
+  // Services states
   const [editingService, setEditingService] = useState<Service | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [showSuccessNotification, setShowSuccessNotification] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
+
+  // Services Section states
+  const [servicesSectionData, setServicesSectionData] = useState(content.servicesSection)
+  const [savingSection, setSavingSection] = useState(false)
+  const [sectionSaveStatus, setSectionSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [showSectionSuccessNotification, setShowSectionSuccessNotification] = useState(false)
+  const [sectionSuccessMessage, setSectionSuccessMessage] = useState('')
 
   // Delete confirmation states
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
@@ -126,6 +138,11 @@ export function ServicesEditor() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  // Update servicesSectionData when content.servicesSection changes
+  React.useEffect(() => {
+    setServicesSectionData(content.servicesSection)
+  }, [content.servicesSection])
 
   // Sort services by order_list for display
   const sortedServices = [...content.services].sort((a, b) => (a.order_list || 0) - (b.order_list || 0))
@@ -257,13 +274,48 @@ export function ServicesEditor() {
     }
   }
 
+  // Services Section handlers
+  const handleSectionInputChange = (field: string, value: string) => {
+    setServicesSectionData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  const handleSaveSection = async () => {
+    setSavingSection(true)
+    setSectionSaveStatus('idle')
+
+    try {
+      const success = await updateServicesSectionContent(servicesSectionData)
+
+      if (success) {
+        setSectionSaveStatus('success')
+        setSectionSuccessMessage('Services section updated successfully!')
+        setShowSectionSuccessNotification(true)
+
+        setTimeout(() => {
+          setShowSectionSuccessNotification(false)
+        }, 3000)
+      } else {
+        setSectionSaveStatus('error')
+        setTimeout(() => setSectionSaveStatus('idle'), 3000)
+      }
+    } catch (error) {
+      setSectionSaveStatus('error')
+      setTimeout(() => setSectionSaveStatus('idle'), 3000)
+    } finally {
+      setSavingSection(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Services</h1>
-          <p className="text-gray-600 mt-1">Manage service offerings. Drag to reorder.</p>
+          <h1 className="text-2xl font-bold text-gray-900">Services Management</h1>
+          <p className="text-gray-600 mt-1">Manage service offerings and section content.</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" asChild>
@@ -275,35 +327,164 @@ export function ServicesEditor() {
         </div>
       </div>
 
-      {/* Drag and Drop Context */}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext items={sortedServices.map(service => service.id)} strategy={verticalListSortingStrategy}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedServices.map((service) => (
-              <SortableServiceCard
-                key={service.id}
-                service={service}
-                onEdit={handleEditService}
-                onDelete={handleDeleteService}
-              />
-            ))}
+      {/* Tabs */}
+      <div className="border-b border-gray-200">
+        <nav className="-mb-px flex space-x-8">
+          <button
+            onClick={() => setActiveTab('services')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'services'
+                ? 'border-sky-500 text-sky-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Briefcase className="w-4 h-4" />
+              Service Items
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('section')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'section'
+                ? 'border-sky-500 text-sky-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              Section Content
+            </div>
+          </button>
+        </nav>
+      </div>
 
-            {/* Add New Service Card - Not sortable */}
-            <Card className="border-dashed border-2 border-gray-300 bg-gray-50">
-              <CardContent className="flex items-center justify-center h-full min-h-[200px]">
-                <Button variant="ghost" onClick={handleAddService} className="flex flex-col items-center gap-2 h-auto py-8">
-                  <Plus className="w-8 h-8" />
-                  <span>Add Service</span>
+      {/* Tab Content */}
+      {activeTab === 'services' && (
+        <div className="space-y-6">
+          {/* Services List */}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext items={sortedServices.map(service => service.id)} strategy={verticalListSortingStrategy}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sortedServices.map((service) => (
+                  <SortableServiceCard
+                    key={service.id}
+                    service={service}
+                    onEdit={handleEditService}
+                    onDelete={handleDeleteService}
+                  />
+                ))}
+
+                {/* Add New Service Card - Not sortable */}
+                <Card className="border-dashed border-2 border-gray-300 bg-gray-50">
+                  <CardContent className="flex items-center justify-center h-full min-h-[200px]">
+                    <Button variant="ghost" onClick={handleAddService} className="flex flex-col items-center gap-2 h-auto py-8">
+                      <Plus className="w-8 h-8" />
+                      <span>Add Service</span>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </SortableContext>
+          </DndContext>
+        </div>
+      )}
+
+      {activeTab === 'section' && (
+        <div className="space-y-6">
+          {/* Section Header Content */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="w-5 h-5 text-sky-600" />
+                Section Header Content
+              </CardTitle>
+              <p className="text-sm text-gray-600">
+                Edit the main title and description that appears at the top of the services section
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Section Title
+                </label>
+                <input
+                  type="text"
+                  value={servicesSectionData.title}
+                  onChange={(e) => handleSectionInputChange('title', e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
+                  placeholder="Enter section title"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  This is the main heading displayed above the service cards (e.g., "Comprehensive Financial Solutions")
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Section Description
+                </label>
+                <textarea
+                  value={servicesSectionData.description}
+                  onChange={(e) => handleSectionInputChange('description', e.target.value)}
+                  rows={4}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-600"
+                  placeholder="Enter section description"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  This description appears below the title and explains what services you offer
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 pt-4">
+                <Button onClick={handleSaveSection} disabled={savingSection} className="bg-sky-600 hover:bg-sky-700">
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  {savingSection ? 'Saving...' : 'Save Changes'}
                 </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </SortableContext>
-      </DndContext>
+
+                {sectionSaveStatus === 'error' && (
+                  <div className="flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                    <AlertCircle className="w-4 h-4" />
+                    <span className="text-sm font-medium">Failed to save</span>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Preview Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Eye className="w-5 h-5 text-sky-600" />
+                Preview
+              </CardTitle>
+              <p className="text-sm text-gray-600">
+                See how your changes will look on the public website
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center space-y-6 p-6 bg-gray-50 rounded-lg">
+                <div className="inline-block">
+                  <span className="px-3 py-1 bg-sky-100 text-sky-800 text-sm rounded-full border border-sky-200">
+                    Our Services
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  {servicesSectionData.title || 'Section Title'}
+                </h3>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  {servicesSectionData.description || 'Section description will appear here...'}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Edit/Add Service Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -393,7 +574,7 @@ export function ServicesEditor() {
         </DialogContent>
       </Dialog>
 
-      {/* Success Notification Toast */}
+      {/* Success Notification Toast for Services */}
       {showSuccessNotification && (
         <div className="fixed top-4 right-4 z-50 flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out">
           <CheckCircle className="w-5 h-5 flex-shrink-0" />
@@ -406,6 +587,23 @@ export function ServicesEditor() {
             className="ml-4 text-green-600 hover:text-green-800 transition-colors"
           >
             ×
+          </button>
+        </div>
+      )}
+
+      {/* Success Notification Toast for Section */}
+      {showSectionSuccessNotification && (
+        <div className="fixed top-4 right-4 z-50 flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out">
+          <CheckCircle className="w-5 h-5 flex-shrink-0" />
+          <div>
+            <p className="font-medium">{sectionSuccessMessage}</p>
+            <p className="text-sm text-green-600">Changes have been saved successfully</p>
+          </div>
+          <button
+            onClick={() => setShowSectionSuccessNotification(false)}
+            className="ml-4 text-green-600 hover:text-green-800 transition-colors"
+          >
+            X
           </button>
         </div>
       )}

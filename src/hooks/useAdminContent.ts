@@ -43,6 +43,10 @@ const defaultContent: WebsiteContent = {
       team: "50+"
     }
   },
+  servicesSection: {
+    title: "Comprehensive Financial Solutions",
+    description: "We offer a full spectrum of investment advisory services designed to meet the diverse needs of our clients across various industries."
+  },
   services: [
     {
       id: "1",
@@ -224,6 +228,25 @@ export function useAdminContent() {
           order_list: service.order_list || 0
         }))
         setContent(prev => ({ ...prev, services }))
+      }
+
+      // Load services section content
+      const { data: servicesSectionData, error: servicesSectionError } = await supabase
+        .from('services_section_content')
+        .select('*')
+        .limit(1)
+        .single()
+
+      if (servicesSectionError && servicesSectionError.code !== 'PGRST116') {
+        // Error loading services section content
+      } else if (servicesSectionData) {
+        setContent(prev => ({
+          ...prev,
+          servicesSection: {
+            title: servicesSectionData.title,
+            description: servicesSectionData.description
+          }
+        }))
       }
 
       // Load team content

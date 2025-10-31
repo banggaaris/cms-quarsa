@@ -400,7 +400,10 @@ export default function App() {
       <section id="services" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Animated Header */}
-          <ServicesHeader />
+          <ServicesHeader
+            title={content.servicesSection.title}
+            description={content.servicesSection.description}
+          />
 
           {/* Animated Service Cards */}
           <ServicesContainer>
@@ -573,11 +576,9 @@ export default function App() {
                         className="text-xs text-gray-500 space-y-1"
                       >
                         <div className="flex items-center justify-center gap-1">
-                          <Briefcase className="w-3 h-3" />
                           <span className="text-xs">{member.experience}</span>
                         </div>
                         <div className="flex items-center justify-center gap-1">
-                          <Award className="w-3 h-3" />
                           <span className="text-xs">{member.education}</span>
                         </div>
                       </motion.div>

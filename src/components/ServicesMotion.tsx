@@ -262,7 +262,12 @@ export const FloatingParticles = () => {
 }
 
 // Section header dengan animasi
-export const ServicesHeader = () => {
+interface ServicesHeaderProps {
+  title?: string;
+  description?: string;
+}
+
+export const ServicesHeader = ({ title, description }: ServicesHeaderProps) => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
@@ -289,17 +294,16 @@ export const ServicesHeader = () => {
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.8, delay: 0.3 }}
       >
-        Comprehensive Financial Solutions
+        {title || "Comprehensive Financial Solutions"}
       </motion.h2>
 
       <motion.p
-        className="text-xl text-gray-600 max-w-3xl mx-auto"
+        className="text-xl text-gray-600 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.8, delay: 0.4 }}
       >
-        We offer a full spectrum of investment advisory services designed to meet
-        the diverse needs of our clients across various industries.
+        {description || "We offer a full spectrum of investment advisory services designed to meet the diverse needs of our clients across various industries."}
       </motion.p>
     </motion.div>
   )

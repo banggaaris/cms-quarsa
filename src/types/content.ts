@@ -96,10 +96,16 @@ export interface ContactContent {
   };
 }
 
+export interface ServicesSectionContent {
+  title: string;
+  description: string;
+}
+
 export interface WebsiteContent {
   hero: HeroContent;
   allHeroes: HeroContent[];
   about: AboutContent;
+  servicesSection: ServicesSectionContent;
   services: Service[];
   team: TeamMember[];
   credentials: Credential[];
