@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { DeleteConfirmationModal } from './DeleteConfirmationModal'
 import { useClientsContent } from '@/hooks/useClientsContent'
 import { Client } from '@/types/content'
-import { Plus, Edit, Trash2, Eye, Building, Link as LinkIcon, GripVertical, CheckCircle, AlertCircle } from 'lucide-react'
+import { Plus, Edit, Trash2, Eye, Building, GripVertical, CheckCircle, AlertCircle } from 'lucide-react'
 import {
   DndContext,
   closestCenter,
@@ -187,7 +187,12 @@ export function ClientsEditor() {
       } else {
         // Add new client
         const { name, logo_url } = client
-        const success = await addClient({ name, logo_url })
+        const success = await addClient({
+          name,
+          logo_url,
+          industry: '',
+          description: ''
+        })
         if (success) {
           setSaveStatus('success')
           setSuccessMessage('Client created successfully!')
