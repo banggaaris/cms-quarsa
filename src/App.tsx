@@ -42,6 +42,7 @@ import { ServiceDetailModal } from '@/components/ServiceDetailModal'
 import { useContent } from '@/hooks/useContent'
 import { useCompanySettings } from '@/hooks/useCompanySettings'
 import { useHeroContent } from '@/hooks/useHeroContent'
+import { Analytics } from '@vercel/analytics/react'
 
 export default function App() {
   const { content, loading, reloadTeamContent, reloadServicesContent } = useContent()
@@ -1216,6 +1217,7 @@ export default function App() {
         </div>
       </footer>
       <CookieConsent />
+      <Analytics />
     </div>
     </>
   )
