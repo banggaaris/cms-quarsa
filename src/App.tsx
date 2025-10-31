@@ -282,7 +282,7 @@ export default function App() {
               <div className="space-y-4">
                 <h1 id="hero-heading">
                   <BlurText
-                    text={currentHero?.title || 'Leading Investment Advisory Firm'}
+                    text={currentHero?.title || ' '}
                     delay={50}
                     animateBy="words"
                     direction="bottom"
@@ -293,7 +293,7 @@ export default function App() {
 
                 <h2>
                   <BlurText
-                    text={currentHero?.subtitle || 'Strategic Financial Solutions for Sustainable Growth'}
+                    text={currentHero?.subtitle || ' '}
                     delay={40}
                     animateBy="words"
                     direction="bottom"
@@ -309,7 +309,7 @@ export default function App() {
                   className="text-base max-w-lg leading-relaxed"
                   style={{ color: currentHero?.colors?.descriptionColor || "#4b5563" }}
                 >
-                  {currentHero?.description || 'We provide expert investment advisory services to help businesses achieve their financial goals.'}
+                  {currentHero?.description || ' '}
                 </motion.p>
               </div>
 
