@@ -346,7 +346,7 @@ export default function App() {
       {/* About Us Section */}
       <section id="about" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className={`grid gap-16 items-center ${(content.about.showMission || content.about.showVision) ? 'lg:grid-cols-2' : 'lg:grid-cols-1'}`}>
             <div className="space-y-8">
               <div>
                 <Badge className="mb-4 bg-sky-100 text-sky-800 border-sky-200">About Us</Badge>
@@ -363,24 +363,35 @@ export default function App() {
 
               </div>
 
-            <div className="relative">
-              <div
-                className="rounded-2xl p-8 text-white"
-                style={{
-                  background: `linear-gradient(to bottom right, ${content.about.gradientFromColor || '#0c4a6e'}, ${content.about.gradientToColor || '#111827'})`
-                }}
-              >
-                <h3 className="text-xl font-bold mb-6">Our Mission</h3>
-                <p className="text-base mb-6 text-justify">
-                  {content.about.mission || 'Loading mission...'}
-                </p>
-                <Separator className="bg-white/20 my-6" />
-                <h3 className="text-xl font-bold mb-6">Our Vision</h3>
-                <p className="text-base text-justify">
-                  {content.about.vision || 'Loading vision...'}
-                </p>
+            {(content.about.showMission || content.about.showVision) && (
+              <div className="relative">
+                <div
+                  className="rounded-2xl p-8 text-white"
+                  style={{
+                    background: `linear-gradient(to bottom right, ${content.about.gradientFromColor || '#0c4a6e'}, ${content.about.gradientToColor || '#111827'})`
+                  }}
+                >
+                  {content.about.showMission && (
+                    <>
+                      <h3 className="text-xl font-bold mb-6">Our Mission</h3>
+                      <p className="text-base mb-6 text-justify">
+                        {content.about.mission || 'Loading mission...'}
+                      </p>
+                      {content.about.showVision && <Separator className="bg-white/20 my-6" />}
+                    </>
+                  )}
+
+                  {content.about.showVision && (
+                    <>
+                      <h3 className="text-xl font-bold mb-6">Our Vision</h3>
+                      <p className="text-base text-justify">
+                        {content.about.vision || 'Loading vision...'}
+                      </p>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

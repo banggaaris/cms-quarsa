@@ -7,6 +7,8 @@ export interface AboutContent {
   description2: string
   mission: string
   vision: string
+  showMission: boolean
+  showVision: boolean
   gradientFromColor: string
   gradientToColor: string
 }
@@ -17,6 +19,8 @@ const defaultAboutContent: AboutContent = {
   description2: "Our team of seasoned professionals brings decades of experience in investment banking, corporate restructuring, and strategic advisory services to help clients navigate complex financial challenges and seize growth opportunities.",
   mission: "To provide exceptional investment advisory services that create sustainable value for our clients through strategic insight, operational excellence, and unwavering commitment to success.",
   vision: "To be the most trusted investment advisory partner in Southeast Asia, recognized for our integrity, expertise, and transformative impact on businesses and economies.",
+  showMission: true,
+  showVision: true,
   gradientFromColor: "#0c4a6e",
   gradientToColor: "#111827"
 }
@@ -46,6 +50,8 @@ export function useAboutContent() {
           description2: data.description2,
           mission: data.mission,
           vision: data.vision,
+          showMission: data.show_mission !== undefined ? data.show_mission : true,
+          showVision: data.show_vision !== undefined ? data.show_vision : true,
           gradientFromColor: data.gradient_from_color || "#0c4a6e",
           gradientToColor: data.gradient_to_color || "#111827"
         })
@@ -65,6 +71,8 @@ export function useAboutContent() {
         description2: aboutUpdate.description2 || about.description2,
         mission: aboutUpdate.mission || about.mission,
         vision: aboutUpdate.vision || about.vision,
+        show_mission: aboutUpdate.showMission !== undefined ? aboutUpdate.showMission : about.showMission,
+        show_vision: aboutUpdate.showVision !== undefined ? aboutUpdate.showVision : about.showVision,
         gradient_from_color: aboutUpdate.gradientFromColor || about.gradientFromColor,
         gradient_to_color: aboutUpdate.gradientToColor || about.gradientToColor
       }

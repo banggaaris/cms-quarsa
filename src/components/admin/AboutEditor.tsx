@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ColorPicker } from '@/components/ui/color-picker'
+import { ToggleSwitch } from '@/components/ui/toggle-switch'
 import { useAboutContent } from '@/hooks/useAboutContent'
-import { Save, CheckCircle, AlertCircle, Building, Target, Palette } from 'lucide-react'
+import { Save, CheckCircle, AlertCircle, Building, Target, Palette, Eye } from 'lucide-react'
 
 export function AboutEditor() {
   const { about, loading, updateAbout } = useAboutContent()
@@ -47,7 +48,7 @@ export function AboutEditor() {
     }
   }
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | boolean) => {
     setAboutData(prev => ({
       ...prev,
       [field]: value
@@ -143,13 +144,42 @@ export function AboutEditor() {
           </CardContent>
         </Card>
 
+        {/* Visibility Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Eye className="w-5 h-5 text-sky-600" />
+              Visibility Settings
+            </CardTitle>
+            <p className="text-sm text-gray-600">Control which sections are visible on the About Us page</p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <ToggleSwitch
+              label="Show Mission Statement"
+              description="Display the mission statement section on the About Us page"
+              checked={aboutData.showMission}
+              onChange={(checked) => handleInputChange('showMission', checked)}
+            />
+
+            <ToggleSwitch
+              label="Show Vision Statement"
+              description="Display the vision statement section on the About Us page"
+              checked={aboutData.showVision}
+              onChange={(checked) => handleInputChange('showVision', checked)}
+            />
+          </CardContent>
+        </Card>
+
         {/* Vision & Mission */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="w-5 h-5 text-sky-600" />
-              Vision & Mission
+              Vision & Mission Content
             </CardTitle>
+            <p className="text-sm text-gray-600">
+              Edit the content for mission and vision statements. These will only be visible if enabled above.
+            </p>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
