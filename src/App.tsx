@@ -23,11 +23,7 @@ import {
   CheckCircle,
   BarChart3,
   Image as ImageIcon,
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram
-} from 'lucide-react'
+  } from 'lucide-react'
 import { CookieConsent } from '@/components/CookieConsent'
 import { BlurText } from '@/components/BlurText'
 import { ManualSlider } from '@/components/InfiniteSlider'
@@ -348,7 +344,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`grid gap-16 items-center ${(content.about.showMission || content.about.showVision) ? 'lg:grid-cols-2' : 'lg:grid-cols-1'}`}>
             <div className="space-y-8">
-              <div>
+              <div className="text-center">
                 <Badge className="mb-4 bg-sky-100 text-sky-800 border-sky-200">About Us</Badge>
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">
                   {content.about.title}
@@ -1153,59 +1149,7 @@ export default function App() {
                 <div>{companySettings?.address || 'Jakarta, Indonesia'}</div>
               </div>
 
-              {/* Social Media Links */}
-              {(companySettings?.facebook_url || companySettings?.twitter_url || companySettings?.linkedin_url || companySettings?.instagram_url) && (
-                <div className="space-y-2">
-                  <h5 className="font-medium text-gray-300">Follow Us</h5>
-                  <div className="flex gap-3">
-                    {companySettings?.facebook_url && (
-                      <a
-                        href={companySettings.facebook_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
-                        aria-label="Facebook"
-                      >
-                        <Facebook className="w-4 h-4 text-white" />
-                      </a>
-                    )}
-                    {companySettings?.twitter_url && (
-                      <a
-                        href={companySettings.twitter_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-9 h-9 bg-sky-500 rounded-lg flex items-center justify-center hover:bg-sky-600 transition-colors"
-                        aria-label="Twitter"
-                      >
-                        <Twitter className="w-4 h-4 text-white" />
-                      </a>
-                    )}
-                    {companySettings?.linkedin_url && (
-                      <a
-                        href={companySettings.linkedin_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-9 h-9 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors"
-                        aria-label="LinkedIn"
-                      >
-                        <Linkedin className="w-4 h-4 text-white" />
-                      </a>
-                    )}
-                    {companySettings?.instagram_url && (
-                      <a
-                        href={companySettings.instagram_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-9 h-9 bg-gradient-to-br from-pink-500 via-purple-500 to-orange-500 rounded-lg flex items-center justify-center hover:from-pink-600 hover:via-purple-600 hover:to-orange-600 transition-all"
-                        aria-label="Instagram"
-                      >
-                        <Instagram className="w-4 h-4 text-white" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
+                          </div>
           </div>
 
           <Separator className="bg-gray-800 my-8" />
