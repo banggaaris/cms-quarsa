@@ -84,7 +84,6 @@ export default function App() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading content...</p>
-          <p className="mt-2 text-sm text-gray-500">If this takes too long, content will load from default values</p>
         </div>
       </div>
     )
@@ -113,20 +112,20 @@ export default function App() {
   return (
     <>
       <SEO
-        title={currentHero?.title ? `${currentHero.title} - ${companySettings?.company_name || 'PT Quasar Capital'}` : undefined}
+        title={currentHero?.title ? `${currentHero.title} - ${companySettings?.company_name || 'PT Quasar Investama'}` : undefined}
         description={currentHero?.description || companySettings?.meta_description}
-        keywords={companySettings?.meta_keywords || "investment advisory, financial consulting, PT Quasar Capital, M&A advisory, corporate restructuring, Indonesia investment"}
+        keywords={companySettings?.meta_keywords || "investment advisory, financial consulting, PT Quasar Investama, M&A advisory, corporate restructuring, Indonesia investment"}
         canonical={companySettings?.website_url || "https://quasarcapital.co.id"}
         ogImage={companySettings?.og_image_url || "/hero-og-image.jpg"}
         favicon={companySettings?.favicon_url}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "ProfessionalService",
-          "name": companySettings?.company_name || "PT Quasar Capital",
+          "name": companySettings?.company_name || "PT Quasar Investama",
           "description": companySettings?.company_description || currentHero?.description,
           "provider": {
             "@type": "Organization",
-            "name": companySettings?.company_name || "PT Quasar Capital",
+            "name": companySettings?.company_name || "PT Quasar Investama",
             "url": companySettings?.website_url || "https://quasarcapital.co.id"
           },
           "areaServed": {
@@ -166,7 +165,7 @@ export default function App() {
               )}
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
-                  {companySettings?.company_name || 'PT Quasar Capital'}
+                  {companySettings?.company_name || 'PT Quasar Investama'}
                 </h1>
                 <p className="text-xs text-gray-500">
                   {companySettings?.company_tagline || 'Investment Advisory Excellence'}
@@ -498,7 +497,7 @@ export default function App() {
                       <div className="absolute inset-0 border-3 border-white/20 z-10 rounded-t-2xl"></div>
                       <img
                         src={member.image}
-                        alt={`${member.name} - ${member.position} at PT Quasar Capital`}
+                        alt={`${member.name} - ${member.position} at PT Quasar Investama`}
                         className="w-full h-full object-cover object-top"
                         loading="lazy"
                         style={{
@@ -596,245 +595,110 @@ export default function App() {
 
       {/* Team Member Detail Dialog */}
       <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
-        <DialogContent className="max-w-5xl w-[95vw] sm:w-[90vw] lg:w-[80vw] max-h-[85vh] overflow-hidden">
+        <DialogContent className="max-w-3xl w-[95vw] sm:w-[90vw] lg:w-[70vw] max-h-[85vh] p-0">
           {selectedMember && (
-            <>
-              {/* Mobile Layout - Stacked */}
-              <div className="block lg:hidden">
-                {/* Photo Section - Mobile */}
-                <div className="flex justify-center pb-6">
-                  <div className="relative group">
-                    <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-xl overflow-hidden border-4 border-white shadow-lg">
-                      <img
-                        src={selectedMember.image}
-                        alt={`${selectedMember.name} - ${selectedMember.position} at PT Quasar Capital`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                    </div>
-                    {/* Subtle decorative background */}
-                    <div className="absolute -inset-2 bg-sky-100 rounded-xl -z-10 transform rotate-2 opacity-30"></div>
-                  </div>
+            <div className="flex flex-col h-[85vh]">
+              {/* Header Section - Fixed */}
+              <div className="flex-shrink-0 text-center space-y-4 p-6 border-b bg-white">
+                <DialogTitle className="text-2xl sm:text-3xl font-bold text-gray-900">
+                  {selectedMember.name}
+                </DialogTitle>
+                <DialogDescription className="text-lg sm:text-xl text-red-600 font-semibold">
+                  {selectedMember.position}
+                </DialogDescription>
+
+                {/* Quick Info Badges */}
+                <div className="flex flex-wrap justify-center gap-2">
+                  <Badge className="bg-sky-100 text-sky-800 border-sky-200 px-3 py-1 text-sm font-medium">
+                    💼 {selectedMember.experience}
+                  </Badge>
+                  <Badge variant="outline" className="border-gray-300 px-3 py-1 text-sm font-medium">
+                    🎓 {selectedMember.education}
+                  </Badge>
                 </div>
 
-                {/* Content Section - Mobile */}
-                <div className="flex-1 flex flex-col max-h-[60vh] overflow-hidden">
-                  {/* Header Info - Mobile */}
-                  <div className="text-center space-y-3 pb-4">
-                    <DialogTitle className="text-xl sm:text-2xl font-bold text-gray-900">
-                      {selectedMember.name}
-                    </DialogTitle>
-                    <DialogDescription className="text-base sm:text-lg text-red-600 font-semibold">
-                      {selectedMember.position}
-                    </DialogDescription>
-
-                    {/* Quick Info Badges - Mobile */}
-                    <div className="flex flex-wrap justify-center gap-2">
-                      <Badge className="bg-sky-100 text-sky-800 border-sky-200 px-3 py-1 text-xs font-medium">
-                        💼 {selectedMember.experience}
-                      </Badge>
-                      <Badge variant="outline" className="border-gray-300 px-3 py-1 text-xs font-medium">
-                        🎓 {selectedMember.education}
-                      </Badge>
-                    </div>
-
-                    {/* Expertise Summary - Mobile */}
-                    {selectedMember.expertise && (
-                      <div className="bg-gray-50 rounded-lg p-3 text-left">
-                        <h4 className="font-semibold text-gray-900 mb-1 flex items-center gap-2 text-sm">
-                          <Briefcase className="w-3 h-3" />
-                          Expertise
-                        </h4>
-                        <p className="text-gray-700 text-sm">{selectedMember.expertise}</p>
-                      </div>
-                    )}
+                {/* Expertise Summary */}
+                {selectedMember.expertise && (
+                  <div className="bg-gray-50 rounded-lg p-4 text-left max-w-2xl mx-auto">
+                    <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                      <Briefcase className="w-4 h-4" />
+                      Expertise
+                    </h4>
+                    <p className="text-gray-700">{selectedMember.expertise}</p>
                   </div>
-
-                  {/* Scrollable Content - Mobile */}
-                  <div className="flex-1 overflow-y-auto space-y-4 px-1">
-                    {/* About Section - Mobile */}
-                    {selectedMember.bio && (
-                      <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                          <Users className="w-4 h-4 text-sky-600" />
-                          About
-                        </h3>
-                        <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 rounded-lg p-4">
-                          {selectedMember.bio}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Areas of Expertise Section - Mobile */}
-                    {selectedMember.specializations && selectedMember.specializations.length > 0 && (
-                      <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                          <Target className="w-4 h-4 text-sky-600" />
-                          Areas of Expertise
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedMember.specializations.map((spec: string, idx: number) => (
-                            <Badge
-                              key={idx}
-                              className="bg-gradient-to-r from-sky-50 to-blue-50 text-sky-800 border-sky-200 px-3 py-1 text-xs font-medium"
-                            >
-                              {spec}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Achievements Section - Mobile */}
-                    {selectedMember.achievements && selectedMember.achievements.length > 0 && (
-                      <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                          <Award className="w-4 h-4 text-amber-600" />
-                          Key Achievements
-                        </h3>
-                        <div className="space-y-2">
-                          {selectedMember.achievements.map((achievement: string, idx: number) => (
-                            <div key={idx} className="flex items-start gap-2 bg-amber-50 rounded-lg p-3">
-                              <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                              <p className="text-gray-700 text-sm">{achievement}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Close Button - Mobile */}
-                  <div className="flex justify-end pt-4 border-t mt-4">
-                    <Button
-                      variant="outline"
-                      onClick={() => setSelectedMember(null)}
-                      className="px-4 py-2 text-sm font-medium"
-                    >
-                      Close Profile
-                    </Button>
-                  </div>
-                </div>
+                )}
               </div>
 
-              {/* Desktop Layout - Two Columns */}
-              <div className="hidden lg:flex gap-8 h-full">
-                {/* Left Column - Photo */}
-                <div className="flex-shrink-0 w-1/4 flex flex-col items-center justify-center">
-                  <div className="relative group">
-                    <div className="w-40 h-40 rounded-xl overflow-hidden border-4 border-white shadow-lg">
-                      <img
-                        src={selectedMember.image}
-                        alt={`${selectedMember.name} - ${selectedMember.position} at PT Quasar Capital`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
+              {/* Scrollable Content Area - Takes remaining space */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                {/* About Section dengan Scroll */}
+                {selectedMember.bio && (
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <Users className="w-5 h-5 text-sky-600" />
+                      Biography
+                    </h3>
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                        {selectedMember.bio}
+                      </p>
                     </div>
-                    {/* Subtle decorative background */}
-                    <div className="absolute -inset-2 bg-sky-100 rounded-xl -z-10 transform rotate-2 opacity-30"></div>
                   </div>
-                </div>
+                )}
 
-                {/* Right Column - Text Content */}
-                <div className="flex-1 flex flex-col min-h-0">
-                  {/* Header Info - Desktop */}
-                  <div className="space-y-3 pb-4">
-                    <DialogTitle className="text-3xl font-bold text-gray-900">
-                      {selectedMember.name}
-                    </DialogTitle>
-                    <DialogDescription className="text-xl text-red-600 font-semibold">
-                      {selectedMember.position}
-                    </DialogDescription>
-
-                    {/* Quick Info Badges - Desktop */}
+                {/* Areas of Expertise Section */}
+                {selectedMember.specializations && selectedMember.specializations.length > 0 && (
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <Target className="w-5 h-5 text-sky-600" />
+                      Areas of Expertise
+                    </h3>
                     <div className="flex flex-wrap gap-2">
-                      <Badge className="bg-sky-100 text-sky-800 border-sky-200 px-3 py-1 text-sm font-medium">
-                        💼 {selectedMember.experience} experience
-                      </Badge>
-                      <Badge variant="outline" className="border-gray-300 px-3 py-1 text-sm font-medium">
-                        🎓 {selectedMember.education}
-                      </Badge>
+                      {selectedMember.specializations.map((spec: string, idx: number) => (
+                        <Badge
+                          key={idx}
+                          className="bg-gradient-to-r from-sky-50 to-blue-50 text-sky-800 border-sky-200 px-3 py-1 text-sm font-medium hover:from-sky-100 hover:to-blue-100 transition-colors"
+                        >
+                          {spec}
+                        </Badge>
+                      ))}
                     </div>
-
-                    {/* Expertise Summary - Desktop */}
-                    {selectedMember.expertise && (
-                      <div className="bg-gray-50 rounded-lg p-3">
-                        <h4 className="font-semibold text-gray-900 mb-1 flex items-center gap-2 text-sm">
-                          <Briefcase className="w-4 h-4" />
-                          Expertise
-                        </h4>
-                        <p className="text-gray-700">{selectedMember.expertise}</p>
-                      </div>
-                    )}
                   </div>
+                )}
 
-                  {/* Scrollable Content - Desktop */}
-                  <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-                    {/* About Section - Desktop */}
-                    {selectedMember.bio && (
-                      <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                          <Users className="w-4 h-4 text-sky-600" />
-                          About
-                        </h3>
-                        <p className="text-gray-700 leading-relaxed bg-gray-50 rounded-lg p-4">
-                          {selectedMember.bio}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Areas of Expertise Section - Desktop */}
-                    {selectedMember.specializations && selectedMember.specializations.length > 0 && (
-                      <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                          <Target className="w-4 h-4 text-sky-600" />
-                          Areas of Expertise
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedMember.specializations.map((spec: string, idx: number) => (
-                            <Badge
-                              key={idx}
-                              className="bg-gradient-to-r from-sky-50 to-blue-50 text-sky-800 border-sky-200 px-3 py-1 text-sm font-medium hover:from-sky-100 hover:to-blue-100 transition-colors"
-                            >
-                              {spec}
-                            </Badge>
-                          ))}
+                {/* Achievements Section */}
+                {selectedMember.achievements && selectedMember.achievements.length > 0 && (
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <Award className="w-5 h-5 text-amber-600" />
+                      Key Achievements
+                    </h3>
+                    <div className="space-y-3">
+                      {selectedMember.achievements.map((achievement: string, idx: number) => (
+                        <div key={idx} className="flex items-start gap-3 bg-amber-50 rounded-lg p-4">
+                          <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                          <p className="text-gray-700">{achievement}</p>
                         </div>
-                      </div>
-                    )}
-
-                    {/* Achievements Section - Desktop */}
-                    {selectedMember.achievements && selectedMember.achievements.length > 0 && (
-                      <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                          <Award className="w-4 h-4 text-amber-600" />
-                          Key Achievements
-                        </h3>
-                        <div className="space-y-2">
-                          {selectedMember.achievements.map((achievement: string, idx: number) => (
-                            <div key={idx} className="flex items-start gap-2 bg-amber-50 rounded-lg p-3">
-                              <CheckCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                              <p className="text-gray-700">{achievement}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                      ))}
+                    </div>
                   </div>
+                )}
 
-                  {/* Close Button - Desktop */}
-                  <div className="flex justify-end pt-4 border-t mt-4">
-                    <Button
-                      variant="outline"
-                      onClick={() => setSelectedMember(null)}
-                      className="px-4 py-2 text-sm font-medium"
-                    >
-                      Close Profile
-                    </Button>
-                  </div>
-                </div>
+                {/* Extra padding at bottom for better scroll experience */}
+                <div className="h-8"></div>
               </div>
-            </>
+
+              {/* Close Button - Fixed */}
+              <div className="flex-shrink-0 flex justify-end p-6 border-t bg-white">
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedMember(null)}
+                  className="px-6 py-2 text-sm font-medium"
+                >
+                  Close Profile
+                </Button>
+              </div>
+            </div>
           )}
         </DialogContent>
       </Dialog>
@@ -1244,7 +1108,7 @@ export default function App() {
                 )}
                 <div>
                   <h3 className="text-lg font-bold">
-                    {companySettings?.company_name || 'PT Quasar Capital'}
+                    {companySettings?.company_name || 'PT Quasar Investama'}
                   </h3>
                   <p className="text-xs text-gray-400">
                     {companySettings?.company_tagline || 'Investment Advisory Excellence'}
@@ -1347,7 +1211,7 @@ export default function App() {
           <Separator className="bg-gray-800 my-8" />
 
           <div className="text-center text-sm text-gray-400">
-            <p>&copy; {new Date().getFullYear()} {companySettings?.company_name || 'PT Quasar Capital'}. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} {companySettings?.company_name || 'PT Quasar Investama'}. All rights reserved.</p>
           </div>
         </div>
       </footer>

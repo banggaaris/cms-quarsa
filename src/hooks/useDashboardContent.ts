@@ -86,7 +86,7 @@ export function useDashboardContent() {
       }))
 
     } catch (error) {
-      console.error('Error loading dashboard stats:', error)
+      // Error loading dashboard stats
     } finally {
       setLoading(false)
     }

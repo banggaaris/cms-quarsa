@@ -80,7 +80,7 @@ export function HeroSlidesEditor() {
       try {
         await deleteSlide(slideId)
       } catch (error) {
-        console.error('Error deleting slide:', error)
+        // Error deleting slide
       }
     }
   }

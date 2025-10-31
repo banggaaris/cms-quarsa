@@ -171,7 +171,7 @@ export function ClientsEditor() {
         setTimeout(() => setShowSuccessNotification(false), 3000)
       }
     } catch (error) {
-      console.error('Error deleting client:', error)
+      // Error('Error deleting client:', error)
       setDeleteError(error instanceof Error ? error.message : 'Failed to delete client')
     } finally {
       setDeleting(false)
@@ -220,7 +220,7 @@ export function ClientsEditor() {
         }, 100)
       }
     } catch (err) {
-      console.error('Error saving client:', err)
+      // Error('Error saving client:', err)
       setSaveStatus('error')
     } finally {
       setSaving(false)

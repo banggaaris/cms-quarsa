@@ -59,24 +59,24 @@ export function useCompanySettings() {
         .maybeSingle()
 
       if (error) {
-        console.error('Error loading company settings:', error)
+        // Error loading company settings
         // Set default values if there's an error
         setSettings({
           id: '',
-          company_name: 'PT Quasar Capital',
+          company_name: 'PT Quasar Investama',
           company_tagline: 'Investment Advisory Excellence',
           website_url: 'https://quasarcapital.co.id',
           contact_email: 'info@quasarcapital.co.id',
           contact_phone: '+62 21 1234 5678',
-          meta_title: 'PT Quasar Capital - Investment Advisory Excellence',
+          meta_title: 'PT Quasar Investama - Investment Advisory Excellence',
           meta_description: 'Leading investment advisory firm in Indonesia providing comprehensive financial solutions.',
-          meta_keywords: 'investment advisory, financial consulting, PT Quasar Capital, M&A advisory, corporate restructuring, Indonesia investment'
+          meta_keywords: 'investment advisory, financial consulting, PT Quasar Investama, M&A advisory, corporate restructuring, Indonesia investment'
         } as CompanySettings)
       } else if (data) {
         setSettings(data as CompanySettings)
       }
     } catch (err) {
-      console.error('Error loading company settings:', err)
+      // Error loading company settings
     } finally {
       setLoading(false)
     }

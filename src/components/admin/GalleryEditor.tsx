@@ -173,7 +173,7 @@ export function GalleryEditor() {
         setTimeout(() => setShowSuccessNotification(false), 3000)
       }
     } catch (error) {
-      console.error('Error deleting gallery item:', error)
+      // Error('Error deleting gallery item:', error)
       setDeleteError(error instanceof Error ? error.message : 'Failed to delete gallery item')
     } finally {
       setDeleting(false)
@@ -222,7 +222,7 @@ export function GalleryEditor() {
         }, 100)
       }
     } catch (err) {
-      console.error('Error saving gallery item:', err)
+      // Error('Error saving gallery item:', err)
       setSaveStatus('error')
     } finally {
       setSaving(false)

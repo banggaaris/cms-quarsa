@@ -38,7 +38,7 @@ export function useAboutContent() {
         .single()
 
       if (error && error.code !== 'PGRST116') {
-        console.error('Error loading about content:', error)
+        // Error('Error loading about content:', error)
       } else if (data) {
         setAbout({
           title: data.title,
@@ -51,7 +51,7 @@ export function useAboutContent() {
         })
       }
     } catch (error) {
-      console.error('Error loading about content:', error)
+      // Error('Error loading about content:', error)
     } finally {
       setLoading(false)
     }
@@ -91,7 +91,7 @@ export function useAboutContent() {
               }
 
       if (!result || result.error) {
-        console.error('Error updating about content:', result?.error || 'Unknown error')
+        // Error('Error updating about content:', result?.error || 'Unknown error')
         return false
       }
 
@@ -99,7 +99,7 @@ export function useAboutContent() {
       setAbout(prev => ({ ...prev, ...aboutUpdate }))
             return true
     } catch (error) {
-      console.error('Error updating about:', error)
+      // Error('Error updating about:', error)
       return false
     }
   }

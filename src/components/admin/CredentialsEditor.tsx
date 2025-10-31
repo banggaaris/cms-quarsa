@@ -170,7 +170,7 @@ export function CredentialsEditor() {
         setTimeout(() => setShowSuccessNotification(false), 3000)
       }
     } catch (error) {
-      console.error('Error deleting credential:', error)
+      // Error deleting credential
       setDeleteError(error instanceof Error ? error.message : 'Failed to delete credential')
     } finally {
       setDeleting(false)
@@ -219,7 +219,7 @@ export function CredentialsEditor() {
         }, 100)
       }
     } catch (err) {
-      console.error('Error saving credential:', err)
+      // Error saving credential
       setSaveStatus('error')
     } finally {
       setSaving(false)

@@ -22,7 +22,7 @@ export function useClientsContent() {
         .order('order_index', { ascending: true })
 
       if (fetchError) {
-        console.error('Error loading clients:', fetchError)
+        // Error('Error loading clients:', fetchError)
         setError(fetchError.message)
         return
       }
@@ -39,7 +39,7 @@ export function useClientsContent() {
         setClients(clientsData)
       }
     } catch (err) {
-      console.error('Error loading clients:', err)
+      // Error('Error loading clients:', err)
       setError('Failed to load clients')
     } finally {
       setLoading(false)
@@ -86,7 +86,7 @@ export function useClientsContent() {
         .single()
 
       if (insertError) {
-        console.error('Error adding client:', insertError)
+        // Error('Error adding client:', insertError)
         setError(insertError.message)
         return null
       }
@@ -104,7 +104,7 @@ export function useClientsContent() {
         return newClient
       }
     } catch (err) {
-      console.error('Error adding client:', err)
+      // Error('Error adding client:', err)
       setError('Failed to add client')
       return null
     }
@@ -141,7 +141,7 @@ export function useClientsContent() {
         .single()
 
       if (updateError) {
-        console.error('Error updating client:', updateError)
+        // Error('Error updating client:', updateError)
         setError(updateError.message)
         return null
       }
@@ -159,7 +159,7 @@ export function useClientsContent() {
         return updatedClient
       }
     } catch (err) {
-      console.error('Error updating client:', err)
+      // Error('Error updating client:', err)
       setError('Failed to update client')
       return null
     }
@@ -175,7 +175,7 @@ export function useClientsContent() {
         .eq('id', id)
 
       if (deleteError) {
-        console.error('Error deleting client:', deleteError)
+        // Error('Error deleting client:', deleteError)
         setError(deleteError.message)
         return false
       }
@@ -183,7 +183,7 @@ export function useClientsContent() {
       setClients(prev => prev.filter(client => client.id !== id))
       return true
     } catch (err) {
-      console.error('Error deleting client:', err)
+      // Error('Error deleting client:', err)
       setError('Failed to delete client')
       return false
     }
@@ -203,7 +203,7 @@ export function useClientsContent() {
           .eq('id', client.id)
 
         if (reorderError) {
-          console.error('Error reordering client:', reorderError)
+          // Error('Error reordering client:', reorderError)
           setError(reorderError.message)
           return false
         }
@@ -212,7 +212,7 @@ export function useClientsContent() {
       setClients(updatedClients)
       return true
     } catch (err) {
-      console.error('Error reordering clients:', err)
+      // Error('Error reordering clients:', err)
       setError('Failed to reorder clients')
       return false
     }

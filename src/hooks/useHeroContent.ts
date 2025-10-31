@@ -36,13 +36,13 @@ export function useHeroContent() {
         .order('updated_at', { ascending: false })
 
       if (error) {
-        console.error('Error loading hero content:', error)
+        // Error('Error loading hero content:', error)
       } else if (data) {
         setHeroes(data)
         setCurrentHero(data[0] || null)
       }
     } catch (error) {
-      console.error('Error loading hero content:', error)
+      // Error('Error loading hero content:', error)
     } finally {
       setLoading(false)
     }
@@ -78,7 +78,7 @@ export function useHeroContent() {
               heroPayload.colors = hero.colors
             }
           } else {
-            console.error('Hero not found for ID:', heroId)
+            // Error('Hero not found for ID:', heroId)
             return
           }
         } else {
@@ -122,13 +122,13 @@ export function useHeroContent() {
       }
 
       if (!result || result.error) {
-        console.error('Error updating hero:', result?.error || 'Unknown error')
+        // Error('Error updating hero:', result?.error || 'Unknown error')
         return
       }
 
       await loadHeroContent()
     } catch (error) {
-      console.error('Error updating hero:', error)
+      // Error('Error updating hero:', error)
     }
   }
 
@@ -154,14 +154,14 @@ export function useHeroContent() {
         .single()
 
       if (result.error) {
-        console.error('Error creating hero:', result.error)
+        // Error('Error creating hero:', result.error)
         return null
       }
 
       await loadHeroContent()
       return result.data
     } catch (error) {
-      console.error('Error creating hero:', error)
+      // Error('Error creating hero:', error)
       return null
     }
   }
@@ -176,7 +176,7 @@ export function useHeroContent() {
         .single()
 
       if (checkError) {
-        console.error('Error checking hero existence:', checkError)
+        // Error('Error checking hero existence:', checkError)
         throw new Error(`Hero not found or check failed: ${checkError.message}`)
       }
 
@@ -190,7 +190,7 @@ export function useHeroContent() {
         .eq('id', heroId)
 
       if (result.error) {
-        console.error('Error deleting hero:', result.error)
+        // Error('Error deleting hero:', result.error)
         throw new Error(`Failed to delete hero: ${result.error.message}`)
       }
 
@@ -219,7 +219,7 @@ export function useHeroContent() {
       await loadHeroContent()
       return { success: true }
     } catch (error) {
-      console.error('Error deleting hero:', error)
+      // Error('Error deleting hero:', error)
       throw error
     }
   }

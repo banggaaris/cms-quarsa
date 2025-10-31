@@ -138,7 +138,7 @@ export function SettingsEditor() {
         setTimeout(() => setShowSuccessNotification(false), 3000)
       }
     } catch (error) {
-      console.error('Error uploading logo:', error)
+      // Error('Error uploading logo:', error)
       setSaveStatus('error')
       setTimeout(() => setSaveStatus('idle'), 3000)
     } finally {
@@ -163,7 +163,7 @@ export function SettingsEditor() {
         setTimeout(() => setSaveStatus('idle'), 3000)
       }
     } catch (error) {
-      console.error('Error saving company info:', error)
+      // Error('Error saving company info:', error)
       setSaveStatus('error')
       setTimeout(() => setSaveStatus('idle'), 3000)
     } finally {
@@ -188,7 +188,7 @@ export function SettingsEditor() {
         setTimeout(() => setSaveStatus('idle'), 3000)
       }
     } catch (error) {
-      console.error('Error saving SEO settings:', error)
+      // Error('Error saving SEO settings:', error)
       setSaveStatus('error')
       setTimeout(() => setSaveStatus('idle'), 3000)
     } finally {
@@ -213,7 +213,7 @@ export function SettingsEditor() {
         setTimeout(() => setSaveStatus('idle'), 3000)
       }
     } catch (error) {
-      console.error('Error saving social media:', error)
+      // Error('Error saving social media:', error)
       setSaveStatus('error')
       setTimeout(() => setSaveStatus('idle'), 3000)
     } finally {
@@ -238,7 +238,7 @@ export function SettingsEditor() {
         setTimeout(() => setSaveStatus('idle'), 3000)
       }
     } catch (error) {
-      console.error('Error saving theme colors:', error)
+      // Error('Error saving theme colors:', error)
       setSaveStatus('error')
       setTimeout(() => setSaveStatus('idle'), 3000)
     } finally {

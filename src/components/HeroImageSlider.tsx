@@ -69,11 +69,7 @@ export const HeroImageSlider = ({
   // Use default slides if no published slides are available yet
   const displaySlides = slides.length > 0 ? slides : defaultSlides
 
-  // Debug: log when component mounts
-  useEffect(() => {
-    console.log('HeroImageSlider mounted with slides:', displaySlides.length)
-  }, [displaySlides])
-
+  
   useEffect(() => {
     if (!autoPlay || isPaused || loading) return
 

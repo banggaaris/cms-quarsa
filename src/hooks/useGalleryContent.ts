@@ -22,7 +22,7 @@ export function useGalleryContent() {
         .order('order_index', { ascending: true })
 
       if (fetchError) {
-        console.error('Error loading gallery:', fetchError)
+        // Error('Error loading gallery:', fetchError)
         setError(fetchError.message)
         return
       }
@@ -38,7 +38,7 @@ export function useGalleryContent() {
         setGallery(galleryData)
       }
     } catch (err) {
-      console.error('Error loading gallery:', err)
+      // Error('Error loading gallery:', err)
       setError('Failed to load gallery')
     } finally {
       setLoading(false)
@@ -81,7 +81,7 @@ export function useGalleryContent() {
         .single()
 
       if (insertError) {
-        console.error('Error adding gallery item:', insertError)
+        // Error('Error adding gallery item:', insertError)
         setError(insertError.message)
         return null
       }
@@ -98,7 +98,7 @@ export function useGalleryContent() {
         return newItem
       }
     } catch (err) {
-      console.error('Error adding gallery item:', err)
+      // Error('Error adding gallery item:', err)
       setError('Failed to add gallery item')
       return null
     }
@@ -131,7 +131,7 @@ export function useGalleryContent() {
         .single()
 
       if (updateError) {
-        console.error('Error updating gallery item:', updateError)
+        // Error('Error updating gallery item:', updateError)
         setError(updateError.message)
         return null
       }
@@ -148,7 +148,7 @@ export function useGalleryContent() {
         return updatedItem
       }
     } catch (err) {
-      console.error('Error updating gallery item:', err)
+      // Error('Error updating gallery item:', err)
       setError('Failed to update gallery item')
       return null
     }
@@ -164,7 +164,7 @@ export function useGalleryContent() {
         .eq('id', id)
 
       if (deleteError) {
-        console.error('Error deleting gallery item:', deleteError)
+        // Error('Error deleting gallery item:', deleteError)
         setError(deleteError.message)
         return false
       }
@@ -172,7 +172,7 @@ export function useGalleryContent() {
       setGallery(prev => prev.filter(item => item.id !== id))
       return true
     } catch (err) {
-      console.error('Error deleting gallery item:', err)
+      // Error('Error deleting gallery item:', err)
       setError('Failed to delete gallery item')
       return false
     }
@@ -192,7 +192,7 @@ export function useGalleryContent() {
           .eq('id', item.id)
 
         if (reorderError) {
-          console.error('Error reordering gallery item:', reorderError)
+          // Error('Error reordering gallery item:', reorderError)
           setError(reorderError.message)
           return false
         }
@@ -201,7 +201,7 @@ export function useGalleryContent() {
       setGallery(updatedGallery)
       return true
     } catch (err) {
-      console.error('Error reordering gallery:', err)
+      // Error('Error reordering gallery:', err)
       setError('Failed to reorder gallery')
       return false
     }

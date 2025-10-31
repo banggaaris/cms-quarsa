@@ -29,7 +29,7 @@ export function useHeroSlides() {
         .order('order_index', { ascending: true })
 
       if (error) {
-        console.error('Error loading hero slides:', error)
+        // Error('Error loading hero slides:', error)
       } else if (data) {
         setSlides(data)
         // Filter only published slides for display
@@ -37,7 +37,7 @@ export function useHeroSlides() {
         setPublishedSlides(published)
       }
     } catch (error) {
-      console.error('Error loading hero slides:', error)
+      // Error('Error loading hero slides:', error)
     } finally {
       setLoading(false)
     }
@@ -61,14 +61,14 @@ export function useHeroSlides() {
         .single()
 
       if (error) {
-        console.error('Error updating slide:', error)
+        // Error('Error updating slide:', error)
         throw error
       }
 
       await loadHeroSlides()
       return data
     } catch (error) {
-      console.error('Error updating slide:', error)
+      // Error('Error updating slide:', error)
       throw error
     }
   }
@@ -101,14 +101,14 @@ export function useHeroSlides() {
         .single()
 
       if (error) {
-        console.error('Error creating slide:', error)
+        // Error('Error creating slide:', error)
         throw error
       }
 
       await loadHeroSlides()
       return data
     } catch (error) {
-      console.error('Error creating slide:', error)
+      // Error('Error creating slide:', error)
       throw error
     }
   }
@@ -123,7 +123,7 @@ export function useHeroSlides() {
         .single()
 
       if (checkError) {
-        console.error('Error checking slide existence:', checkError)
+        // Error('Error checking slide existence:', checkError)
         throw new Error(`Slide not found or check failed: ${checkError.message}`)
       }
 
@@ -137,7 +137,7 @@ export function useHeroSlides() {
         .eq('id', slideId)
 
       if (error) {
-        console.error('Error deleting slide:', error)
+        // Error('Error deleting slide:', error)
         throw new Error(`Failed to delete slide: ${error.message}`)
       }
 
@@ -164,7 +164,7 @@ export function useHeroSlides() {
       await loadHeroSlides()
       return { success: true }
     } catch (error) {
-      console.error('Error deleting slide:', error)
+      // Error('Error deleting slide:', error)
       throw error
     }
   }
@@ -181,7 +181,7 @@ export function useHeroSlides() {
       await Promise.all(updates)
       await loadHeroSlides()
     } catch (error) {
-      console.error('Error reordering slides:', error)
+      // Error('Error reordering slides:', error)
       throw error
     }
   }

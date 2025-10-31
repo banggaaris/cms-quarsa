@@ -175,7 +175,7 @@ export function ServicesEditor() {
         setTimeout(() => setShowSuccessNotification(false), 3000)
       }
     } catch (error) {
-      console.error('Error deleting service:', error)
+      // Error deleting service
       setDeleteError(error instanceof Error ? error.message : 'Failed to delete service')
     } finally {
       setDeleting(false)
@@ -224,7 +224,7 @@ export function ServicesEditor() {
         setSaveStatus('error')
       }
     } catch (err) {
-      console.error('Error saving service:', err)
+      // Error saving service
       setSaveStatus('error')
     } finally {
       setSaving(false)
@@ -251,7 +251,7 @@ export function ServicesEditor() {
 
         if (!success) {
           // If database update failed, reload content to sync
-          console.error('Failed to update services order in database');
+          // Failed to update services order in database
         }
       }
     }

@@ -25,7 +25,7 @@ export function useServicesContent() {
         .order('order_list', { ascending: true })
 
       if (error) {
-        console.error('Error loading services:', error)
+        // Error loading services
       } else if (data) {
         const servicesData: Service[] = data.map(service => ({
           id: service.id,
@@ -37,7 +37,7 @@ export function useServicesContent() {
         setServices(servicesData)
       }
     } catch (error) {
-      console.error('Error loading services:', error)
+      // Error loading services
     } finally {
       setLoading(false)
     }

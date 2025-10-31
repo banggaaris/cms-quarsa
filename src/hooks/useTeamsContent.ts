@@ -22,7 +22,7 @@ export function useTeamsContent() {
         .order('order_index', { ascending: true })
 
       if (fetchError) {
-        console.error('Error loading team:', fetchError)
+        //error('Error loading team:', fetchError)
         setError(fetchError.message)
         return
       }
@@ -43,7 +43,7 @@ export function useTeamsContent() {
         setTeam(teamData)
       }
     } catch (err) {
-      console.error('Error loading team:', err)
+      //error('Error loading team:', err)
       setError('Failed to load team members')
     } finally {
       setLoading(false)
@@ -91,7 +91,7 @@ export function useTeamsContent() {
         .single()
 
       if (insertError) {
-        console.error('Error adding team member:', insertError)
+        //error('Error adding team member:', insertError)
         setError(insertError.message)
         return null
       }
@@ -113,7 +113,7 @@ export function useTeamsContent() {
         return newMember
       }
     } catch (err) {
-      console.error('Error adding team member:', err)
+      //error('Error adding team member:', err)
       setError('Failed to add team member')
       return null
     }
@@ -151,7 +151,7 @@ export function useTeamsContent() {
         .single()
 
       if (updateError) {
-        console.error('Error updating team member:', updateError)
+        //error('Error updating team member:', updateError)
         setError(updateError.message)
         return null
       }
@@ -173,7 +173,7 @@ export function useTeamsContent() {
         return updatedMember
       }
     } catch (err) {
-      console.error('Error updating team member:', err)
+      //error('Error updating team member:', err)
       setError('Failed to update team member')
       return null
     }
@@ -182,32 +182,32 @@ export function useTeamsContent() {
   const deleteTeamMember = async (id: string) => {
     try {
       setError(null)
-      console.log('Attempting to delete team member with ID:', id)
+      //log('Attempting to delete team member with ID:', id)
 
       const { error: deleteError, count } = await supabase
         .from('team_content')
         .delete({ count: 'exact' })
         .eq('id', id)
 
-      console.log('Delete operation result:', { error: deleteError, count })
+      //log('Delete operation result:', { error: deleteError, count })
 
       if (deleteError) {
-        console.error('Error deleting team member:', deleteError)
+        //error('Error deleting team member:', deleteError)
         setError(`Delete failed: ${deleteError.message}`)
         return false
       }
 
       if (count === 0) {
-        console.warn('No team member found to delete with ID:', id)
+        //warn('No team member found to delete with ID:', id)
         setError('Team member not found')
         return false
       }
 
-      console.log('Successfully deleted team member, updating local state')
+      //log('Successfully deleted team member, updating local state')
       setTeam(prev => prev.filter(member => member.id !== id))
       return true
     } catch (err) {
-      console.error('Error deleting team member:', err)
+      //error('Error deleting team member:', err)
       setError('Failed to delete team member')
       return false
     }
@@ -227,7 +227,7 @@ export function useTeamsContent() {
           .eq('id', member.id)
 
         if (reorderError) {
-          console.error('Error reordering team member:', reorderError)
+          //error('Error reordering team member:', reorderError)
           setError(reorderError.message)
           return false
         }
@@ -236,7 +236,7 @@ export function useTeamsContent() {
       setTeam(updatedTeam)
       return true
     } catch (err) {
-      console.error('Error reordering team:', err)
+      //error('Error reordering team:', err)
       setError('Failed to reorder team members')
       return false
     }

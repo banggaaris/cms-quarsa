@@ -25,11 +25,11 @@ export function SEO({
   const { content } = useContent()
 
   // Default SEO values
-  const defaultTitle = title || 'PT Quasar Capital - Investment Advisory Excellence Since 1994'
+  const defaultTitle = title || 'PT Quasar Investama - Investment Advisory Excellence Since 1994'
   const defaultDescription = description || content?.hero?.description ||
     'Leading investment advisory firm in Indonesia since 1994. Expert financial consulting, M&A advisory, corporate restructuring, and comprehensive investment solutions.'
   const defaultKeywords = keywords ||
-    'investment advisory, financial consulting, PT Quasar Capital, M&A advisory, corporate restructuring, Indonesia investment, financial services, investment management, capital advisory'
+    'investment advisory, financial consulting, PT Quasar Investama, M&A advisory, corporate restructuring, Indonesia investment, financial services, investment management, capital advisory'
   const defaultCanonical = canonical || 'https://quasarcapital.co.id'
   const defaultOgImage = ogImage || '/og-image.jpg'
 
@@ -37,7 +37,7 @@ export function SEO({
   const organizationStructuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "PT Quasar Capital",
+    "name": "PT Quasar Investama",
     "url": "https://quasarcapital.co.id",
     "logo": "https://quasarcapital.co.id/logo.png",
     "description": defaultDescription,
@@ -68,7 +68,7 @@ export function SEO({
     "description": defaultDescription,
     "provider": {
       "@type": "Organization",
-      "name": "PT Quasar Capital",
+      "name": "PT Quasar Investama",
       "url": "https://quasarcapital.co.id"
     },
     "areaServed": {
@@ -89,7 +89,7 @@ export function SEO({
       <title>{defaultTitle}</title>
       <meta name="description" content={defaultDescription} />
       <meta name="keywords" content={defaultKeywords} />
-      <meta name="author" content="PT Quasar Capital" />
+      <meta name="author" content="PT Quasar Investama" />
       <meta name="robots" content="index, follow" />
       <link rel="canonical" href={defaultCanonical} />
 
@@ -101,7 +101,7 @@ export function SEO({
       <meta property="og:image" content={defaultOgImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:site_name" content="PT Quasar Capital" />
+      <meta property="og:site_name" content="PT Quasar Investama" />
       <meta property="og:locale" content="en_ID" />
 
       {/* Twitter */}

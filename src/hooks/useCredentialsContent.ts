@@ -22,7 +22,7 @@ export function useCredentialsContent() {
         .order('order_index', { ascending: true })
 
       if (fetchError) {
-        console.error('Error loading credentials:', fetchError)
+        // Error('Error loading credentials:', fetchError)
         setError(fetchError.message)
         return
       }
@@ -38,7 +38,7 @@ export function useCredentialsContent() {
         setCredentials(credentialsData)
       }
     } catch (err) {
-      console.error('Error loading credentials:', err)
+      // Error('Error loading credentials:', err)
       setError('Failed to load credentials')
     } finally {
       setLoading(false)
@@ -76,7 +76,7 @@ export function useCredentialsContent() {
         .single()
 
       if (insertError) {
-        console.error('Error adding credential:', insertError)
+        // Error('Error adding credential:', insertError)
         setError(insertError.message)
         return null
       }
@@ -93,7 +93,7 @@ export function useCredentialsContent() {
         return newCredential
       }
     } catch (err) {
-      console.error('Error adding credential:', err)
+      // Error('Error adding credential:', err)
       setError('Failed to add credential')
       return null
     }
@@ -121,7 +121,7 @@ export function useCredentialsContent() {
         .single()
 
       if (updateError) {
-        console.error('Error updating credential:', updateError)
+        // Error('Error updating credential:', updateError)
         setError(updateError.message)
         return null
       }
@@ -138,7 +138,7 @@ export function useCredentialsContent() {
         return updatedCredential
       }
     } catch (err) {
-      console.error('Error updating credential:', err)
+      // Error('Error updating credential:', err)
       setError('Failed to update credential')
       return null
     }
@@ -154,7 +154,7 @@ export function useCredentialsContent() {
         .eq('id', id)
 
       if (deleteError) {
-        console.error('Error deleting credential:', deleteError)
+        // Error('Error deleting credential:', deleteError)
         setError(deleteError.message)
         return false
       }
@@ -162,7 +162,7 @@ export function useCredentialsContent() {
       setCredentials(prev => prev.filter(cred => cred.id !== id))
       return true
     } catch (err) {
-      console.error('Error deleting credential:', err)
+      // Error('Error deleting credential:', err)
       setError('Failed to delete credential')
       return false
     }
@@ -182,7 +182,7 @@ export function useCredentialsContent() {
           .eq('id', credential.id)
 
         if (reorderError) {
-          console.error('Error reordering credential:', reorderError)
+          // Error('Error reordering credential:', reorderError)
           setError(reorderError.message)
           return false
         }
@@ -191,7 +191,7 @@ export function useCredentialsContent() {
       setCredentials(updatedCredentials)
       return true
     } catch (err) {
-      console.error('Error reordering credentials:', err)
+      // Error('Error reordering credentials:', err)
       setError('Failed to reorder credentials')
       return false
     }

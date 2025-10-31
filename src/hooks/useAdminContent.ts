@@ -182,7 +182,7 @@ export function useAdminContent() {
         .order('updated_at', { ascending: false })
 
       if (heroError) {
-        console.error('Error loading hero content:', heroError)
+        // Error loading hero content
       } else if (heroData && heroData.length > 0) {
 
         // Use the most recent hero for display, but store all for admin list
@@ -212,7 +212,7 @@ export function useAdminContent() {
         .order('order_list', { ascending: true })
 
       if (servicesError) {
-        console.error('Error loading services:', servicesError)
+        // Error loading services
       } else if (servicesData) {
         const services: Service[] = servicesData.map(service => ({
           id: service.id,
@@ -231,7 +231,7 @@ export function useAdminContent() {
         .order('order_index', { ascending: true })
 
       if (teamError) {
-        console.error('Error loading team:', teamError)
+        // Error loading team
       } else if (teamData) {
         const team: TeamMember[] = teamData.map(member => ({
           id: member.id,
@@ -255,7 +255,7 @@ export function useAdminContent() {
         .order('order_index', { ascending: true })
 
       if (clientsError) {
-        console.error('Error loading clients:', clientsError)
+        // Error loading clients
       } else if (clientsData) {
         const clients: Client[] = clientsData.map(client => ({
           id: client.id,
@@ -275,7 +275,7 @@ export function useAdminContent() {
         .order('order_index', { ascending: true })
 
       if (credentialsError) {
-        console.error('Error loading credentials:', credentialsError)
+        // Error('Error loading credentials:', credentialsError)
       } else if (credentialsData) {
         const credentials: Credential[] = credentialsData.map(cred => ({
           id: cred.id,
@@ -295,7 +295,7 @@ export function useAdminContent() {
         .single()
 
       if (aboutError && aboutError.code !== 'PGRST116') {
-        console.error('Error loading about content:', aboutError)
+        // Error('Error loading about content:', aboutError)
       } else if (aboutData) {
         setContent(prev => ({
           ...prev,
@@ -320,7 +320,7 @@ export function useAdminContent() {
         .single()
 
       if (contactError && contactError.code !== 'PGRST116') {
-        console.error('Error loading contact:', contactError)
+        // Error('Error loading contact:', contactError)
       } else if (contactData) {
         setContent(prev => ({
           ...prev,
@@ -338,7 +338,7 @@ export function useAdminContent() {
       }
 
     } catch (error) {
-      console.error('Error loading content:', error)
+      // Error('Error loading content:', error)
     } finally {
       setLoading(false)
     }
@@ -369,7 +369,7 @@ export function useAdminContent() {
               status: hero.status || currentHero.status || 'draft'
             }
           } else {
-            console.error('Hero not found for ID:', heroId)
+            // Error('Hero not found for ID:', heroId)
             return
           }
         } else {
@@ -409,14 +409,14 @@ export function useAdminContent() {
       }
 
       if (!result || result.error) {
-        console.error('Error updating hero:', result?.error || 'Unknown error')
+        // Error('Error updating hero:', result?.error || 'Unknown error')
         return
       }
 
             // Reload content to get updated list
       await loadContent()
           } catch (error) {
-      console.error('Error updating hero:', error)
+      // Error('Error updating hero:', error)
     }
   }
 
@@ -437,7 +437,7 @@ export function useAdminContent() {
         .single()
 
       if (result.error) {
-        console.error('Error creating hero:', result.error)
+        // Error('Error creating hero:', result.error)
         return null
       }
 
@@ -445,7 +445,7 @@ export function useAdminContent() {
       await loadContent()
       return result.data
     } catch (error) {
-      console.error('Error creating hero:', error)
+      // Error('Error creating hero:', error)
       return null
     }
   }
@@ -458,14 +458,14 @@ export function useAdminContent() {
         .eq('id', heroId)
 
       if (result.error) {
-        console.error('Error deleting hero:', result.error)
+        // Error('Error deleting hero:', result.error)
         return
       }
 
       // Reload content to get updated list
       await loadContent()
     } catch (error) {
-      console.error('Error deleting hero:', error)
+      // Error('Error deleting hero:', error)
     }
   }
 
@@ -511,7 +511,7 @@ export function useAdminContent() {
               }
 
       if (!result || result.error) {
-        console.error('Error updating about content:', result?.error || 'Unknown error')
+        // Error('Error updating about content:', result?.error || 'Unknown error')
         return false
       }
 
@@ -519,7 +519,7 @@ export function useAdminContent() {
       setContent(prev => ({ ...prev, about: { ...prev.about, ...about } }))
             return true
     } catch (error) {
-      console.error('Error updating about:', error)
+      // Error('Error updating about:', error)
       return false
     }
   }
@@ -551,7 +551,7 @@ export function useAdminContent() {
           .upsert(servicesPayload, { onConflict: 'id' })
 
         if (error) {
-          console.error('Error updating service content:', error)
+          // Error('Error updating service content:', error)
           return false
         }
       }
@@ -560,7 +560,7 @@ export function useAdminContent() {
       setContent(prev => ({ ...prev, services }))
       return true
     } catch (error) {
-      console.error('Error updating services:', error)
+      // Error('Error updating services:', error)
       return false
     }
   }
@@ -593,7 +593,7 @@ export function useAdminContent() {
           .upsert(teamPayload, { onConflict: 'id' })
 
         if (error) {
-          console.error('Error updating team content:', error)
+          // Error('Error updating team content:', error)
           return false
         }
       }
@@ -602,7 +602,7 @@ export function useAdminContent() {
       setContent(prev => ({ ...prev, team }))
             return true
     } catch (error) {
-      console.error('Error updating team:', error)
+      // Error('Error updating team:', error)
       return false
     }
   }
@@ -652,7 +652,7 @@ export function useAdminContent() {
       }
 
       if (!result || result.error) {
-        console.error('Error updating contact content:', result?.error || 'Unknown error')
+        // Error('Error updating contact content:', result?.error || 'Unknown error')
         return false
       }
 
@@ -670,7 +670,7 @@ export function useAdminContent() {
       }))
       return true
     } catch (error) {
-      console.error('Error updating contact:', error)
+      // Error('Error updating contact:', error)
       return false
     }
   }

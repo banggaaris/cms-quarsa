@@ -70,7 +70,7 @@ export function ContactEditor() {
         setTimeout(() => setSaveStatus('idle'), 3000)
       }
     } catch (error) {
-      console.error('Error updating contact:', error)
+      // Error updating contact
       setSaveStatus('error')
       setTimeout(() => setSaveStatus('idle'), 3000)
     } finally {

@@ -28,7 +28,7 @@ const defaultContent: WebsiteContent = {
   allHeroes: [],
   about: {
     title: "Leading Investment Advisory Firm",
-    description1: "Founded in 1994, PT Quasar Capital has established itself as Indonesia's premier investment advisory firm, combining deep local expertise with global best practices.",
+    description1: "Founded in 1994, PT Quasar Investama has established itself as Indonesia's premier investment advisory firm, combining deep local expertise with global best practices.",
     description2: "Our team of seasoned professionals brings decades of experience in investment banking, corporate restructuring, and strategic advisory services to help clients navigate complex financial challenges and seize growth opportunities.",
     mission: "To provide exceptional investment advisory services that create sustainable value for our clients through strategic insight, operational excellence, and unwavering commitment to success.",
     vision: "To be the most trusted investment advisory partner in Southeast Asia, recognized for our integrity, expertise, and transformative impact on businesses and economies.",
@@ -80,7 +80,7 @@ const defaultContent: WebsiteContent = {
       experience: "20+ years",
       education: "MBA, Harvard Business School",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
-      bio: "John Anderson leads PT Quasar Capital with over two decades of experience in investment strategy and mergers & acquisitions. He has successfully advised on transactions worth over $5 billion across various sectors.",
+      bio: "John Anderson leads PT Quasar Investama with over two decades of experience in investment strategy and mergers & acquisitions. He has successfully advised on transactions worth over $5 billion across various sectors.",
       specializations: ["Corporate Restructuring", "Investment Banking", "Strategic M&A", "Private Equity"],
       achievements: [
         "Led 150+ successful M&A transactions",
@@ -156,7 +156,7 @@ const defaultContent: WebsiteContent = {
     }
   ],
   contact: {
-    address: "PT Quasar Capital\nJakarta Stock Exchange Building\nTower 2, 15th Floor\nJakarta 12190, Indonesia",
+    address: "PT Quasar Investama\nJakarta Stock Exchange Building\nTower 2, 15th Floor\nJakarta 12190, Indonesia",
     phone: "+62 21 1234 5678",
     email: "info@quasarcapital.co.id",
     businessHours: {
@@ -195,7 +195,7 @@ export function useContent() {
         .single()
 
       if (heroError && heroError.code !== 'PGRST116') {
-        console.error('Error loading hero content:', heroError)
+        // Error loading hero content
       } else if (heroData) {
         setContent(prev => ({
           ...prev,
@@ -221,7 +221,7 @@ export function useContent() {
         .order('order_list', { ascending: true })
 
       if (servicesError) {
-        console.error('Error loading services:', servicesError)
+        // Error loading services
       } else if (servicesData) {
         const services: Service[] = servicesData.map(service => ({
           id: service.id,
@@ -240,7 +240,7 @@ export function useContent() {
         .order('order_index', { ascending: true })
 
       if (teamError) {
-        console.error('Error loading team:', teamError)
+        // Error loading team
       } else if (teamData) {
         const team: TeamMember[] = teamData.map(member => ({
           id: member.id,
@@ -264,7 +264,7 @@ export function useContent() {
         .order('order_index', { ascending: true })
 
       if (clientsError) {
-        console.error('Error loading clients:', clientsError)
+        // Error loading clients
       } else if (clientsData) {
         const clients: Client[] = clientsData.map(client => ({
           id: client.id,
@@ -284,7 +284,7 @@ export function useContent() {
         .order('order_index', { ascending: true })
 
       if (galleryError) {
-        console.error('Error loading gallery:', galleryError)
+        // Error loading gallery
       } else if (galleryData) {
         const gallery: GalleryItem[] = galleryData.map(item => ({
           id: item.id,
@@ -304,7 +304,7 @@ export function useContent() {
         .single()
 
       if (aboutError && aboutError.code !== 'PGRST116') {
-        console.error('Error loading about content:', aboutError)
+        // Error loading about content
       } else if (aboutData) {
         setContent(prev => ({
           ...prev,
@@ -328,7 +328,7 @@ export function useContent() {
         .order('order_index', { ascending: true })
 
       if (credentialsError) {
-        console.error('Error loading credentials:', credentialsError)
+        // Error loading credentials
       } else if (credentialsData) {
         const credentials: Credential[] = credentialsData.map(cred => ({
           id: cred.id,
@@ -348,7 +348,7 @@ export function useContent() {
         .single()
 
       if (contactError && contactError.code !== 'PGRST116') {
-        console.error('Error loading contact:', contactError)
+        // Error loading contact
       } else if (contactData) {
         setContent(prev => ({
           ...prev,
@@ -366,7 +366,7 @@ export function useContent() {
       }
 
     } catch (error) {
-      console.error('Error loading content:', error)
+      // Error loading content
       setLoading(false)
     } finally {
       setLoading(false)
@@ -405,7 +405,7 @@ export function useContent() {
       }
 
       if (result.error) {
-        console.error('Error updating hero:', result.error)
+        // Error updating hero
         return
       }
 
@@ -414,7 +414,7 @@ export function useContent() {
         hero: { ...prev.hero, ...hero }
       }))
     } catch (error) {
-      console.error('Error updating hero:', error)
+      // Error updating hero
     }
   }
 
@@ -446,7 +446,7 @@ export function useContent() {
         .order('order_index', { ascending: true })
 
       if (teamError) {
-        console.error('Error reloading team:', teamError)
+        // Error reloading team
       } else if (teamData) {
         const team: TeamMember[] = teamData.map(member => ({
           id: member.id,
@@ -463,7 +463,7 @@ export function useContent() {
         setContent(prev => ({ ...prev, team }))
       }
     } catch (error) {
-      console.error('Error reloading team:', error)
+      // Error reloading team
     }
   }
 
@@ -475,7 +475,7 @@ export function useContent() {
         .order('order_list', { ascending: true })
 
       if (servicesError) {
-        console.error('Error reloading services:', servicesError)
+        // Error reloading services
       } else if (servicesData) {
         const services: Service[] = servicesData.map(service => ({
           id: service.id,
@@ -487,7 +487,7 @@ export function useContent() {
         setContent(prev => ({ ...prev, services }))
       }
     } catch (error) {
-      console.error('Error reloading services:', error)
+      // Error reloading services
     }
   }
 

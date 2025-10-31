@@ -61,7 +61,7 @@ export function useSettingsContent() {
         .maybeSingle()
 
       if (fetchError) {
-        console.error('Error loading settings:', fetchError)
+        // Error('Error loading settings:', fetchError)
         setError(fetchError.message)
         return
       }
@@ -70,7 +70,7 @@ export function useSettingsContent() {
         setSettings(data as CompanySettings)
       }
     } catch (err) {
-      console.error('Error loading settings:', err)
+      // Error('Error loading settings:', err)
       setError('Failed to load settings')
     } finally {
       setLoading(false)
@@ -97,7 +97,7 @@ export function useSettingsContent() {
         .single()
 
       if (updateError) {
-        console.error('Error updating settings:', updateError)
+        // Error('Error updating settings:', updateError)
         setError(updateError.message)
         return null
       }
@@ -107,7 +107,7 @@ export function useSettingsContent() {
         return data as CompanySettings
       }
     } catch (err) {
-      console.error('Error updating settings:', err)
+      // Error('Error updating settings:', err)
       setError('Failed to update settings')
       return null
     }
@@ -177,7 +177,7 @@ export function useSettingsContent() {
         })
 
       if (uploadError) {
-        console.error('Error uploading logo:', uploadError)
+        // Error('Error uploading logo:', uploadError)
         throw uploadError
       }
 
@@ -187,7 +187,7 @@ export function useSettingsContent() {
 
       return publicUrlData.publicUrl
     } catch (err) {
-      console.error('Error uploading logo:', err)
+      // Error('Error uploading logo:', err)
       throw err
     }
   }

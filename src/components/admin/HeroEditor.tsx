@@ -34,7 +34,7 @@ export function HeroEditor() {
       setHeroToDelete(null)
       setHeroToDeleteTitle('')
     } catch (error) {
-      console.error('Error deleting hero:', error)
+      // Error('Error deleting hero:', error)
       setDeleteError(error instanceof Error ? error.message : 'Failed to delete hero section')
     } finally {
       setDeleting(false)
@@ -169,7 +169,7 @@ export function HeroEditor() {
                                 try {
                                   await unpublishHero(hero.id)
                                 } catch (error) {
-                                  console.error('Error unpublishing hero:', error)
+                                  // Error('Error unpublishing hero:', error)
                                 } finally {
                                   setPublishing(false)
                                 }
@@ -193,7 +193,7 @@ export function HeroEditor() {
                                 try {
                                   await publishHero(hero.id)
                                 } catch (error) {
-                                  console.error('Error publishing hero:', error)
+                                  // Error('Error publishing hero:', error)
                                 } finally {
                                   setPublishing(false)
                                 }

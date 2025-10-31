@@ -29,7 +29,7 @@ export function useTeamContent() {
         .order('order_index', { ascending: true })
 
       if (error) {
-        console.error('Error loading team:', error)
+        // Error loading team
       } else if (data) {
         const teamData: TeamMember[] = data.map(member => ({
           id: member.id,
@@ -45,7 +45,7 @@ export function useTeamContent() {
         setTeam(teamData)
       }
     } catch (error) {
-      console.error('Error loading team:', error)
+      // Error loading team
     } finally {
       setLoading(false)
     }

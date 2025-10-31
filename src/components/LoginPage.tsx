@@ -92,7 +92,7 @@ export function LoginPage() {
             )}
             <div className="text-left">
               <h1 className="text-xl font-bold text-gray-900">
-                {companySettings?.company_name || 'PT Quasar Capital'}
+                {companySettings?.company_name || 'PT Quasar Investama'}
               </h1>
               <p className="text-xs text-gray-500">Admin Portal</p>
             </div>

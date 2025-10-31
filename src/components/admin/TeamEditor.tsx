@@ -194,7 +194,7 @@ export function TeamEditor() {
         setTimeout(() => setShowSuccessNotification(false), 3000)
       }
     } catch (error) {
-      console.error('Error deleting team member:', error)
+      // Error('Error deleting team member:', error)
       setDeleteError(error instanceof Error ? error.message : 'Failed to delete team member')
     } finally {
       setDeleting(false)
@@ -242,7 +242,7 @@ export function TeamEditor() {
         }, 100)
       }
     } catch (err) {
-      console.error('Error saving team member:', err)
+      // Error('Error saving team member:', err)
       setSaveStatus('error')
     } finally {
       setSaving(false)
