@@ -1,22 +1,16 @@
 import { useState } from 'react'
-import { Building } from 'lucide-react'
+import { Building, ChevronLeft, ChevronRight } from 'lucide-react'
 
-interface InfiniteSliderProps {
+interface ManualSliderProps {
   items: any[];
-  speed?: number;
-  pauseOnHover?: boolean;
-  direction?: 'left' | 'right';
   loading?: boolean;
 }
 
-export const InfiniteSlider = ({
+export const ManualSlider = ({
   items,
-  speed = 30,
-  pauseOnHover = true,
-  direction = 'left',
   loading = false
-}: InfiniteSliderProps) => {
-  const [isPaused, setIsPaused] = useState(false);
+}: ManualSliderProps) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Handle empty state and loading
   if (loading) {
@@ -38,81 +32,130 @@ export const InfiniteSlider = ({
     );
   }
 
-  const duplicatedItems = [...items, ...items];
+  const handlePrevious = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? items.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === items.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  // Calculate visible cards based on total number of clients
+  const getVisibleCount = () => {
+    const totalItems = items.length;
+
+    if (totalItems <= 1) return 1;
+    if (totalItems === 2) return 2;
+    if (totalItems === 3) return 3;
+
+    // For 4+ items, show max 3 at once to maintain good UX
+    return Math.min(3, totalItems);
+  };
+
+  const visibleCount = getVisibleCount();
+  const visibleItems = [];
+
+  // Get items for current view (circular)
+  for (let i = 0; i < visibleCount; i++) {
+    const index = (currentIndex + i) % items.length;
+    visibleItems.push(items[index]);
+  }
 
   return (
-    <div
-      className="relative w-full overflow-hidden"
-      onMouseEnter={() => pauseOnHover && setIsPaused(true)}
-      onMouseLeave={() => pauseOnHover && setIsPaused(false)}
-    >
-      <div
-        className="flex gap-6 sm:gap-8 will-change-transform"
-        style={{
-          animation: isPaused ? 'none' : `slide-${direction} ${speed}s linear infinite`,
-          transform: 'translateZ(0)', // Hardware acceleration
-        }}
-      >
-        {duplicatedItems.map((item, index) => (
-          <div
-            key={`${item.name}-${index}`}
-            className="flex-shrink-0 w-72 sm:w-80 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 border border-gray-100"
-          >
-            <div className="text-center space-y-3 sm:space-y-4">
-              <div className="w-16 h-16 mx-auto bg-sky-100 rounded-lg overflow-hidden flex items-center justify-center">
-                {item.logo_url ? (
-                  <img
-                    src={item.logo_url}
-                    alt={`${item.name || 'Client'} logo`}
-                    className="w-full h-full object-contain p-2"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none'
-                      e.currentTarget.nextElementSibling?.classList.remove('hidden')
-                    }}
-                    loading="lazy"
-                  />
-                ) : null}
-                <div className={`${item.logo_url ? 'hidden' : ''} w-full h-full flex items-center justify-center`}>
-                  <Building className="w-8 h-8 text-sky-600" />
+    <div className="relative">
+      <div className="overflow-hidden px-4 sm:px-6 lg:px-8">
+        <div
+          className="flex gap-6 sm:gap-8 transition-transform duration-500 ease-in-out justify-center"
+          style={{
+            transform: 'translateX(0)',
+          }}
+        >
+          {visibleItems.map((item, index) => (
+            <div
+              key={`${item.name}-${currentIndex}-${index}`}
+              className="flex-shrink-0 w-72 sm:w-80 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 border border-gray-100"
+            >
+              <div className="text-center space-y-3 sm:space-y-4">
+                <div className="w-16 h-16 mx-auto bg-sky-100 rounded-lg overflow-hidden flex items-center justify-center">
+                  {item.logo_url ? (
+                    <img
+                      src={item.logo_url}
+                      alt={`${item.name || 'Client'} logo`}
+                      className="w-full h-full object-contain p-2"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                        e.currentTarget.nextElementSibling?.classList.remove('hidden')
+                      }}
+                      loading="lazy"
+                    />
+                  ) : null}
+                  <div className={`${item.logo_url ? 'hidden' : ''} w-full h-full flex items-center justify-center`}>
+                    <Building className="w-8 h-8 text-sky-600" />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-gray-900 truncate px-2">
-                  {item.name || 'Client Name'}
-                </h3>
-                <p className="text-sm font-semibold text-red-600 mt-1 truncate px-2">
-                  {item.industry || 'Industry'}
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 truncate px-2">
+                    {item.name || 'Client Name'}
+                  </h3>
+                  <p className="text-sm font-semibold text-red-600 mt-1 truncate px-2">
+                    {item.industry || 'Industry'}
+                  </p>
+                </div>
+                <p className="text-sm text-gray-600 line-clamp-3 px-2">
+                  {item.description || 'Description not available'}
                 </p>
               </div>
-              <p className="text-sm text-gray-600 line-clamp-3 px-2">
-                {item.description || 'Description not available'}
-              </p>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes slide-left {
-            0% {
-              transform: translateX(0) translateZ(0);
-            }
-            100% {
-              transform: translateX(-50%) translateZ(0);
-            }
-          }
+      {/* Navigation Arrows - only show if more clients than visible count */}
+      {items.length > visibleCount && (
+        <>
+          <button
+            onClick={handlePrevious}
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:text-sky-600 hover:bg-sky-50 transition-all duration-300 z-20 border border-gray-200"
+            aria-label="Previous clients"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
 
-          @keyframes slide-right {
-            0% {
-              transform: translateX(-50%) translateZ(0);
-            }
-            100% {
-              transform: translateX(0) translateZ(0);
-            }
-          }
-        `
-      }} />
+          <button
+            onClick={handleNext}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:text-sky-600 hover:bg-sky-50 transition-all duration-300 z-20 border border-gray-200"
+            aria-label="Next clients"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        </>
+      )}
+
+      {/* Dots Indicator - only show if more than 1 client */}
+      {items.length > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8">
+          {items.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex
+                  ? 'bg-sky-600 w-8'
+                  : 'bg-gray-300 hover:bg-gray-400'
+              }`}
+              aria-label={`Go to client ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

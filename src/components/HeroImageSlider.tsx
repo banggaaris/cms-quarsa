@@ -23,30 +23,6 @@ const defaultSlides: Slide[] = [
     title: "Investment Strategy",
     description: "Data-driven investment solutions for optimal portfolio performance",
     image: "https://picsum.photos/800/500?random=1&blur=2"
-  },
-  {
-    id: "2",
-    title: "Risk Management",
-    description: "Comprehensive risk assessment and mitigation strategies",
-    image: "https://picsum.photos/800/500?random=2&blur=2"
-  },
-  {
-    id: "3",
-    title: "Expert Advisory",
-    description: "Seasoned financial professionals guiding your success",
-    image: "https://picsum.photos/800/500?random=3&blur=2"
-  },
-  {
-    id: "4",
-    title: "Market Analysis",
-    description: "Deep market insights and trend analysis for informed decisions",
-    image: "https://picsum.photos/800/500?random=4&blur=2"
-  },
-  {
-    id: "5",
-    title: "Financial Growth",
-    description: "Strategic planning for sustainable business growth",
-    image: "https://picsum.photos/800/500?random=5&blur=2"
   }
 ]
 
@@ -128,9 +104,9 @@ export const HeroImageSlider = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="space-y-4"
+                className="space-y-6"
               >
-                <h3 className="text-3xl md:text-4xl font-bold leading-tight text-white">
+                <h3 className="text-3xl md:text-3xl font-bold leading-tight text-white">
                   {currentSlide.title}
                 </h3>
                 <p className="text-lg md:text-xl text-white/95">

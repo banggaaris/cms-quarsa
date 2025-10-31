@@ -30,7 +30,7 @@ import {
 } from 'lucide-react'
 import { CookieConsent } from '@/components/CookieConsent'
 import { BlurText } from '@/components/BlurText'
-import { InfiniteSlider } from '@/components/InfiniteSlider'
+import { ManualSlider } from '@/components/InfiniteSlider'
 import { HeroImageSlider } from '@/components/HeroImageSlider'
 import { SEO } from '@/components/SEO'
 import {
@@ -115,8 +115,8 @@ export default function App() {
       <SEO
         title={currentHero?.title ? `${currentHero.title} - ${companySettings?.company_name || 'PT Quasar Investama'}` : undefined}
         description={currentHero?.description || companySettings?.meta_description}
-        keywords={companySettings?.meta_keywords || "investment advisory, financial consulting, PT Quasar Investama, M&A advisory, corporate restructuring, Indonesia investment"}
-        canonical={companySettings?.website_url || "https://quasarcapital.co.id"}
+        keywords={companySettings?.meta_keywords || "Unlocking Local Potential with Global Reach, Indonesia investment"}
+        canonical={companySettings?.website_url || "https://quasarinvestama.id"}
         ogImage={companySettings?.og_image_url || "/hero-og-image.jpg"}
         favicon={companySettings?.favicon_url}
         structuredData={{
@@ -127,7 +127,7 @@ export default function App() {
           "provider": {
             "@type": "Organization",
             "name": companySettings?.company_name || "PT Quasar Investama",
-            "url": companySettings?.website_url || "https://quasarcapital.co.id"
+            "url": companySettings?.website_url || "https://quasarinvestama.id"
           },
           "areaServed": {
             "@type": "Country",
@@ -286,7 +286,7 @@ export default function App() {
                     delay={50}
                     animateBy="words"
                     direction="bottom"
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
+                    className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
                     style={{ color: currentHero?.colors?.titleColor || "#111827" }}
                   />
                 </h1>
@@ -808,7 +808,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Clients Section with Infinite Slider */}
+      {/* Clients Section with Manual Slider */}
       <section id="clients" className="py-24 bg-sky-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <motion.div
@@ -822,10 +822,6 @@ export default function App() {
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
               Trusted by Industry Leaders
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We are proud to partner with some of the most respected companies
-              across various industries in Indonesia and Southeast Asia.
-            </p>
           </motion.div>
         </div>
 
@@ -839,11 +835,8 @@ export default function App() {
           <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-sky-50 to-transparent z-10 pointer-events-none" />
           <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-sky-50 to-transparent z-10 pointer-events-none" />
 
-          <InfiniteSlider
+          <ManualSlider
             items={content.clients}
-            speed={40}
-            pauseOnHover={true}
-            direction="left"
             loading={loading}
           />
         </motion.div>
